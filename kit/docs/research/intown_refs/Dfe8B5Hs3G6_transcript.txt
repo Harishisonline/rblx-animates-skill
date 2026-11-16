@@ -1,0 +1,51 @@
+EVENTS []
+  0.10-  4.00 [12w] In this town, every clock skips exactly one minute at 11:59 PM.
+  4.22-  4.92 [ 3w] Nobody knows why.
+  5.18-  8.42 [ 9w] Every night, clocks jump straight from 11:59 to 12:01.
+  8.62- 13.80 [21w] The locals have learned to live with it, but everyone follows one strange rule: never look outside during the missing minute.
+ 14.08- 18.12 [17w] I thought it was ridiculous until one night when I saw someone standing outside my bedroom window.
+ 18.34- 20.48 [10w] It was a little girl, probably around seven years old.
+ 20.68- 23.14 [ 8w] She was completely still, staring directly at me.
+ 23.40- 26.06 [12w] Something about her face felt familiar, but I couldn't figure out why.
+ 26.32- 28.64 [ 6w] I immediately checked my clock, 11:59.
+ 28.92- 30.74 [ 7w] I blinked, and suddenly it was 12:01.
+ 30.96- 31.74 [ 4w] The girl was gone.
+ 32.10- 33.60 [ 7w] The following night, I saw her again.
+ 33.84- 35.82 [11w] This time she was standing at the end of my driveway.
+ 36.06- 38.42 [14w] I opened the front door and called out to her, but she didn't move.
+ 38.64- 42.20 [15w] Instead, she slowly raised her hand and pointed toward the old house across the street.
+ 42.46- 43.04 [ 2w] She disappeared.
+ 43.40- 45.14 [ 9w] So I decided to investigate the house that night.
+ 45.36- 48.74 [13w] It had been abandoned for years, but something about it seemed strangely familiar.
+ 49.02- 52.98 [15w] Inside, I found an old grandfather clock standing against the wall, but something was wrong.
+ 53.18- 55.14 [ 6w] The grandfather clock wasn't showing 12:01.
+ 55.36- 57.38 [ 8w] It was showing twelve o'clock, the missing minute.
+ 57.64- 61.52 [16w] Its pendulum was still swinging, even though every other clock in town had already moved forward.
+ 61.76- 64.08 [11w] I stepped closer, trying to understand what I was looking at.
+ 64.32- 67.18 [12w] Nearby, I found an old music box sitting on a dusty table.
+ 67.44- 70.34 [13w] I wound it up, and it started playing a melody I somehow recognized.
+ 70.62- 72.62 [ 9w] Suddenly, I heard a little girl's voice behind me.
+ 72.80- 74.56 [ 6w] "You still remember?" I turned around.
+ 74.74- 75.34 [ 3w] There she was.
+ 75.64- 77.66 [12w] I asked her who she was and why she kept following me.
+ 77.84- 83.76 [23w] She just smiled and said, "You promised you'd never forget." Before I could respond, I heard another voice coming from behind the staircase.
+ 83.98- 84.92 [ 5w] A little boy stepped out.
+ 85.10- 88.04 [10w] "Do you still remember us?" I backed away, completely confused.
+ 88.28- 90.24 [ 8w] Then more children began appearing from the hallways.
+ 90.52- 93.60 [13w] Some were sitting on the stairs, while others stood quietly beside the walls.
+ 93.84- 94.82 [ 5w] One of them finally spoke.
+ 95.02- 98.30 [12w] "In here, it's always twelve." I looked back at the grandfather clock.
+ 98.50-101.12 [12w] "Why are you all here?" A little girl looked down before answering.
+101.28-105.26 [15w] "This is the only place where forgotten children can still exist." Another child stepped forward.
+105.44-112.34 [32w] "You're the only one who can still remember us." I didn't understand what they meant until an old photograph had slipped out from behind the music box and landed on the floor.
+112.62-113.08 [ 4w] I picked it up.
+113.32-118.14 [23w] It showed a group of children standing together in front of the very same house, and standing right in the middle was me.
+118.44-120.52 [ 9w] I looked younger, maybe six or seven years old.
+120.74-122.48 [ 9w] Beside me was the little girl from my window.
+122.88-127.76 [16w] Suddenly, memories came rushing back, the games we played, the music box, the promises I made.
+127.98-128.86 [ 4w] She wasn't a stranger.
+129.12-130.02 [ 5w] She was my little sister.
+N words 496 sentences 46 median len 10.0 mean 10.8 max 32
+first word at 0.1 last end 130.02 wpm overall 229 wpm articulation(gaps>0.25 removed) 251
+gaps>0.25: 40 median 0.28 max 0.4 total pause s 11.6
+gaps>0.6: []

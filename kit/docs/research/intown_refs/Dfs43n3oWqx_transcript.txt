@@ -1,0 +1,55 @@
+EVENTS []
+  0.16-  2.80 [14w] In this town, if you say, "I can't wait," you skip right to it.
+  2.90-  4.66 [ 9w] You see, the second you say it, you vanish.
+  4.80-  7.62 [16w] You pop back right next to the thing the moment it happens, not a day older.
+  7.76-  9.20 [ 7w] For you, it feels like one second.
+  9.32- 10.94 [ 9w] But if it never happens, you never come back.
+ 11.06- 14.70 [19w] My twin sister, Tess, has never once said it, until the night she said it to me on purpose.
+ 14.82- 19.32 [23w] Grandpa said, "I can't wait for the pizza," and popped up on the porch 30 minutes later right next to the delivery guy.
+ 19.56- 21.10 [ 9w] Our soccer coach said it about winning a game.
+ 21.24- 22.02 [ 5w] That was three years ago.
+ 22.16- 22.78 [ 3w] We're still losing.
+ 22.90- 24.46 [ 8w] My cousin said it about Christmas in July.
+ 24.58- 25.86 [ 9w] His mom put up a tree the next day.
+ 26.00- 26.46 [ 2w] Didn't count.
+ 26.56- 27.32 [ 5w] It counts what you meant.
+ 27.44- 29.30 [10w] He popped up under the real tree on Christmas morning.
+ 29.44- 32.38 [12w] So here we say, "I can hardly wait," even on birthday invitations.
+ 32.52- 36.48 [20w] Every day after school, Tess and I raced from our gate to the old oak down the street, 100 steps.
+ 36.64- 39.62 [15w] Right before the end, she'd always grab my hand, so every race was a tie.
+ 39.74- 42.32 [13w] In March, I climbed the oak for her kite, and the branch snapped.
+ 42.44- 44.06 [ 8w] The doctor said I might never walk again.
+ 44.14- 45.34 [ 6w] After a month, I quit trying.
+ 45.48- 47.02 [10w] I shut my curtain so I couldn't see the oak.
+ 47.16- 52.38 [28w] One night, Tess took my hand, looked right at me, and said slowly, "I can't wait till you walk to the oak tree." Then my hand was empty.
+ 52.50- 53.42 [ 3w] Tess never slips.
+ 53.56- 54.32 [ 5w] She did it on purpose.
+ 54.48- 56.70 [13w] If I never walked to that oak, my sister was never coming back.
+ 56.84- 58.02 [ 7w] Dad carried me to the oak anyway.
+ 58.18- 58.44 [ 1w] Nothing.
+ 58.58- 60.02 [ 7w] Mom wheeled me the whole hundred steps.
+ 60.20- 60.44 [ 1w] Nothing.
+ 60.58- 64.44 [18w] It counts what you meant, and Tess meant our race, me on my own legs, gate to oak.
+ 64.58- 65.44 [ 5w] So I opened my curtain.
+ 65.60- 69.94 [22w] Every evening, I held the fence and walked from our gate until I fell, and Mom chalked the step where I landed.
+ 70.04- 72.78 [11w] The first night she chalked a zero, then three, 12, 40.
+ 72.92- 75.94 [16w] On our birthday, I blew out the candles alone and froze her half of the cake.
+ 76.08- 78.76 [14w] By August, I could make it to 80, but the fence stops at 80.
+ 78.92- 80.08 [ 6w] After that, there's nothing to hold.
+ 80.20- 81.40 [ 5w] In September, I let go.
+ 81.54- 82.82 [ 5w] At 90, my knees shook.
+ 82.94- 84.14 [ 4w] At 97, I fell.
+ 84.32- 84.72 [ 3w] I got up.
+ 84.98- 87.82 [11w] 98, 99, I touched the oak, and a hand grabbed mine.
+ 87.96- 90.82 [13w] Tess in her pajamas right next to me at the exact same second.
+ 90.92- 92.18 [ 7w] For her, it had been one second.
+ 92.30- 93.34 [ 4w] For me, five months.
+ 93.50- 98.08 [25w] She looked at our hands on the bark and said, "Tie." She's five months younger than me now, so I guess I'm the big brother.
+ 98.26-100.48 [11w] That night, we ate her half of the cake, still frozen.
+100.68-102.62 [10w] Every day after school, we still walk to the oak.
+102.74-104.36 [ 8w] Right before the end, she grabs my hand.
+104.48-105.20 [ 4w] It's always a tie.
+N words 499 sentences 50 median len 9.0 mean 10.0 max 28
+first word at 0.16 last end 105.2 wpm overall 285 wpm articulation(gaps>0.25 removed) 288
+gaps>0.25: 4 median 0.26 max 0.3 total pause s 1.1
+gaps>0.6: []

@@ -1,0 +1,12 @@
+.env
+**/.env
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+*.bak*
+frames/
+frames_lo/
+*.blend1
+kit/assets/music/*
+!kit/assets/music/README.md

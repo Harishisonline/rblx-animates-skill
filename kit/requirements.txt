@@ -1,0 +1,5 @@
+numpy>=2.0
+pillow>=10.0
+PyYAML>=6.0
+# optional: speech-to-text alignment helpers (tools/voice_metrics.py etc.)
+# faster-whisper>=1.2

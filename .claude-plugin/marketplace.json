@@ -1,0 +1,11 @@
+{
+  "name": "rblx-animates",
+  "owner": { "name": "Harish Pradhan", "url": "https://github.com/Harishisonline" },
+  "plugins": [
+    {
+      "name": "rblx-animates",
+      "source": "./",
+      "description": "The RBLX ANIMATES Roblox story video studio skill (needs the kit installed with scripts/install.sh)."
+    }
+  ]
+}

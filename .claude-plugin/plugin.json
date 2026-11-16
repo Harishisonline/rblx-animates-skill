@@ -1,0 +1,9 @@
+{
+  "name": "rblx-animates",
+  "version": "1.0.0",
+  "description": "Make Roblox-style 3D story reels (Blox City and In-this-town) the RBLX ANIMATES way: research, script, Alex narration, meme SFX, Blender animation, captions, end card and render.",
+  "author": { "name": "Harish Pradhan", "url": "https://github.com/Harishisonline" },
+  "homepage": "https://github.com/Harishisonline/rblx-animates-skill",
+  "license": "MIT",
+  "keywords": ["roblox", "animation", "blender", "instagram", "reels", "story", "video"]
+}

@@ -1,0 +1,8 @@
+- 2026-11-13 font Poppins-ExtraBold.ttf (SIL OFL 1.1) from Google Fonts repo: https://raw.githubusercontent.com/google/fonts/main/ofl/poppins/Poppins-ExtraBold.ttf
+- 2026-11-13 font Bangers-Regular.ttf (SIL OFL 1.1) from Google Fonts repo: https://raw.githubusercontent.com/google/fonts/main/ofl/bangers/Bangers-Regular.ttf
+- 2026-11-13 HDRI dresden_station_night (1k) from Poly Haven, CC0: https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/dresden_station_night_1k.hdr
+- 2026-11-13 HDRI modern_buildings_night (1k) from Poly Haven, CC0: https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/modern_buildings_night_1k.hdr
+- 2026-11-13 HDRI boiler_room (1k) from Poly Haven, CC0: https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/boiler_room_1k.hdr
+- 2026-11-13 HDRI kloofendal_48d_partly_cloudy_puresky (1k) from Poly Haven, CC0: https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/kloofendal_48d_partly_cloudy_puresky_1k.hdr
+- 2026-11-13 HDRI industrial_sunset_02_puresky (1k) from Poly Haven, CC0: https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/industrial_sunset_02_puresky_1k.hdr
+- 2026-11-13 HDRI empty_warehouse_01 (1k) from Poly Haven, CC0: https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/empty_warehouse_01_1k.hdr

@@ -1,0 +1,10 @@
+{
+  "voice_preset": "alex_ep1",
+  "voice_id": "yl2ZDV1MzN4HbQJbMihG",
+  "tts_model": "eleven_v3",
+  "blender": "/Applications/Blender.app/Contents/MacOS/Blender",
+  "tmp_dir": "~/RobloxStories_tmp",
+  "auto_clean_frames": true,
+  "caption_v2": { "colors": ["#b46bff", "#26d9ff", "#ffffff", "#ff4bd8"] },
+  "_voice_note": "alex_ep1 = Alex yl2ZDV1MzN4HbQJbMihG, eleven_v3, stability 0.0, similarity 0.75, style 0.25, speaker boost (docs/VOICE_SPEC.md)"
+}
