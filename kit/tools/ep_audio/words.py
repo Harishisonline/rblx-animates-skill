@@ -4,8 +4,7 @@ D=os.environ['EP'].rstrip('/')+'/'
 al=json.load(open(D+'audio/alignment_raw.json'))
 ch=al['characters'];st=al['character_start_times_seconds'];en=al['character_end_times_seconds']
 s=''.join(ch); pre='[fast, urgent, breathless] '
-assert s.startswith(pre), s[:40]
-k=len(pre)
+k=len(pre) if s.startswith(pre) else 0   # v5 (DRIPDYL guide): tts.py v5 strips tags from the alignment
 toks=[];cur=None
 for i in range(k,len(ch)):
     c=ch[i]

@@ -1,5 +1,27 @@
 # Changelog
 
+## 2026-11-17 v5.0 - DRIPDYL guide defaults (camera, blur, voice edit, per-line TTS, viral gate)
+Source: docs/DRIPDYL_STYLE_GUIDE.md (Gemini read the repo; Claude checked every claim against this code).
+**Tested without rendering:** frame_on built in headless Blender (lens 45, f/2.8 solo / 5.6 two-shot, side alternates,
+camera moves from frame 1); post.py v5 run on EP4's raw voice (92.2 s vs 95.6 s, first word 0.02 s); ep_viral_check on
+EP4 reproduces its measured flaws (8 FAIL). tts.py v5 not yet called (costs credits; runs at the next voice gate).
+- `rbx/shotlib.frame_on`: yaw default +/-22 (alternates each call; was 0 straight-on), pitch -4 (was 4), lens 45 (was 35),
+  push 0.15 starting on frame 1 (CUBIC ease-out; was 0.06 ease-in-out), fstop None -> 2.8 solo / 5.6 two-shot, focus on
+  chars[0]'s head (was the bounding-box centre), camera never below floor+0.8. Module constants FRAME_YAW/PITCH/LENS/PUSH.
+- `tools/shotkit.build`: setup_render(blur=False). Motion blur only where a recipe or shot calls look.motion_blur(>0)
+  (whip_pan, run_follow, aerials already do).
+- `rbx/motion`: NORMAL and SNAP timing presets for strike(ch, t, pose, **mo.SNAP).
+- `tools/ep_audio/tts.py`: one eleven_v3 request per tts_script.txt line with its own tags (cached per line; untagged
+  lines get RBX_TTS_DEFAULT_TAG=[excited]); tags stripped from the alignment; writes raw.wav + raw.mp3. RBX_TTS_MODE=single
+  = old behaviour. Voice/settings unchanged.
+- `tools/ep_audio/words.py`: works without the global tag prefix.
+- `tools/ep_audio/post.py`: pause 0.24 (was 0.45), gap 0.08 (was 0.14), detect 0.16 (was 0.22), lead 0 (was 0.10 s),
+  leading silence trimmed, warns above 8 meme pauses ("no_pause": true in meme_cues.json), TEMPO unchanged (1.08, voice
+  gate). audio/post_cfg.json or RBX_* env override; {"pause":0.45,"gap":0.14,"detect":0.22,"lead":0.10} = v4.
+- NEW `tools/ep_viral_check.py <ep>`: static pre-render gate (idle-only shots, actions/s, recipe cameras, hook move,
+  frame-0 blur, first word, wps, silences, meme pauses, hook word time from story.json "hook_word", tagged TTS lines, outro).
+Backups: *.bak_v5.
+
 ## 2026-11-14 v3.7 - integration: format playbooks, hype pace 255-290 wpm, natural faces (data), voice-clarity option
 **Nothing in this release was rendered or listened to.** Faces, ref_* looks and mix D are data/code only (UNRENDERED / not heard).
 - NEW `docs/FORMATS.json` (single source of per-format defaults: look, grade profile, bed, wpm bands, words in first 15 s,

@@ -445,13 +445,30 @@ def _frame_points(ch, t, shot):
     return [top, top + side * w, top - side * w, c + side * w, c - side * w, c]
 
 
-def frame_on(chars, t0, t1, shot="med", yaw=None, lens=35, margin=0.06, pitch=4, push=0.06, fstop=2.8, name="Cam_f",
-             extra=(), headroom=0.04, register=True, clear=True):
+FRAME_YAW = 22.0     # v5 (DRIPDYL guide): 3/4 angle, side alternates call to call (was 0 = straight-on)
+FRAME_PITCH = -4.0   # v5: camera slightly low (was +4, looking down)
+FRAME_LENS = 45.0    # v5: was 35
+FRAME_PUSH = 0.15    # v5: 15 % push that starts on frame 1 (was 6 % ease-in-out)
+_FRAME_SIDE = [1]
+
+
+def frame_on(chars, t0, t1, shot="med", yaw=None, lens=None, margin=0.06, pitch=None, push=None, fstop=None, name="Cam_f",
+             extra=(), headroom=0.04, register=True, clear=True, focus="head", alternate=True):
     """CAMERA THAT FRAMES THE SUBJECTS (v4.1). Solves the distance so every subject's head (with headroom) and body down
     to the shot size (mcu|med|cowboy|full) sits INSIDE the 9:16 frame with a margin, from the subjects' face side
     (yaw = offset in deg from their mean face direction, default 0). Avoids walls (_clear/_blocked: swings yaw).
     EP2 lesson: still_cam guesses cut Ryan + his dad in half at 1:21 and Harry at 0:11. Registers qa.frame for each."""
+    # v5 (DRIPDYL guide) defaults; pass the ACTIVE character(s) only - the speaker/reactor, not everyone in the room.
+    lens = FRAME_LENS if lens is None else lens
+    pitch = FRAME_PITCH if pitch is None else pitch
+    push = FRAME_PUSH if push is None else push
+    if yaw is None:
+        yaw = FRAME_YAW * _FRAME_SIDE[0]
+        if alternate:
+            _FRAME_SIDE[0] *= -1
     chars = list(chars)
+    if fstop is None:
+        fstop = 2.8 if len(chars) <= 1 else 5.6     # two-shots stay sharp on both faces
     pts = [p for ch in chars for p in _frame_points(ch, t0 + 0.3, shot)] + [Vector(e) for e in extra]
     mn = Vector((min(p.x for p in pts), min(p.y for p in pts), min(p.z for p in pts)))
     mx = Vector((max(p.x for p in pts), max(p.y for p in pts), max(p.z for p in pts)))
@@ -480,9 +497,21 @@ def frame_on(chars, t0, t1, shot="med", yaw=None, lens=35, margin=0.06, pitch=4,
         if not _blocked(tgt + dirv * 1.2, p, tuple(c.name for c in chars)) and _clear(p, 0.6):
             best = p; break
         if best is None: best = p
+    floor = min(p.z for p in pts) + 0.8                # v5: a low camera never goes under the floor
+    if best.z < floor:
+        best = Vector((best.x, best.y, floor))
+    end = best + (tgt - best) * push
+    if end.z < floor:
+        end = Vector((end.x, end.y, floor))
+    ftgt = tgt                                          # v5: focus on the main character's head, not between people
+    if focus == "head" and chars:
+        try:
+            ftgt = mo._head_world(chars[0], t0 + 0.3)
+        except Exception as e:
+            print("frame_on focus", e)
     c = Cam(name, lens)
-    c.key(t0, tuple(best), tuple(tgt), lens, focus=tuple(tgt), fstop=fstop)
-    c.key(t1, tuple(best + (tgt - best) * push), tuple(tgt), lens, focus=tuple(tgt), fstop=fstop, ease="EASE_IN_OUT")
+    c.key(t0, tuple(best), tuple(tgt), lens, focus=tuple(ftgt), fstop=fstop, interp="CUBIC", ease="EASE_OUT")
+    c.key(t1, tuple(end), tuple(tgt), lens, focus=tuple(ftgt), fstop=fstop)
     cams.micro(c, deg=0.3, loc=0.015, period=2.2)
     if clear:
         clear_fg(c.ob, chars, t0, t1, shot=shot)

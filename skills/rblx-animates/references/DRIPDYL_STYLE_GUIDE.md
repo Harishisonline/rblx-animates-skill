@@ -122,7 +122,7 @@ Never the same recipe twice in a row (cams.py rule, still valid). **[Gemini]** v
 | Check | Pass | Today (EP4) |
 |---|---|---|
 | frame 0 motion blur | 0.0 | 0.5 |
-| idle-only shots | <= 15 % of shots | most shots |
+| idle-only shots | <= 15 % of shots | 25 of 69 (36 %) |
 | keyed actions per second | >= 1.5 overall, >= 2.5 in 0-3 s | ~0.4 (rough: 1 strike + 15 look_at + 3 walk + 3 nod + 4 laughs + 9 hold in 96 s) |
 | cuts or one big camera move before 3.0 s | >= 2 cuts, or 1 crash_zoom / run_follow | see 0-3 s strip |
 | twist word time (words.json) | <= 2.5 s | ~4 s |
@@ -134,9 +134,15 @@ Never the same recipe twice in a row (cams.py rule, still valid). **[Gemini]** v
 | in-world text inside the caption band (y 1120-1400) | 0 | not measured |
 | like/share/follow outro | **[decision]** | 5.2 s |
 
-## 11. Kit changes this guide implies (not applied yet; need the owner's OK)
+## 11. Kit changes (applied in kit v5.0, 2026-11-17, tested without rendering; see kit CHANGELOG)
 
-New helpers proposed by Gemini, to build and test on one video first:
+Done in v5: the `frame_on` defaults below (alternating +/-22 yaw, pitch -4, 45 mm, 15 % push from frame 1, f/2.8 solo /
+5.6 two-shot, focus on the main head); motion blur off by default in `shotkit`; `mo.NORMAL` / `mo.SNAP` strike presets;
+`tts.py` one request per line with its tags; `post.py` pause 0.24, gap 0.08, lead 0 (TEMPO unchanged, voice gate);
+`tools/ep_viral_check.py` = the section 10 gate. Not built (existing tools cover them): `snap_pose` (= `mo.strike(...,
+**mo.SNAP)`), `two_shot_active` (= `shotlib.ots` + frame_on on the speaker), `react_pop` (= `mo.shock` / `mo.gasp`).
+
+Gemini's original proposals, for reference:
 - `shotlib.snap_pose(ch, t, pose, antic=3, move=3, over=0.14, settle=4, face=None)`: everyday gesture on top of `mo.strike`
   with built-in asymmetry.
 - `shotlib.two_shot_active(speaker, listener, t0, t1, yaw=24.0, lens=45.0, push=0.15)`: MCU on the speaker, listener's
@@ -146,6 +152,7 @@ New helpers proposed by Gemini, to build and test on one video first:
 - `qa.qa_dripdyl(...)`: the section 10 gates, run after the low-res pass.
 - Not needed **[corrected]**: `set_shot_blur` (use the existing `look.motion_blur(shutter)` per shot).
 
-Defaults to change (old -> new): `frame_on` yaw None/0 -> +/-22, pitch 4 -> -4, lens 35 -> 45, push 0.06 -> 0.15,
-fstop 2.8 -> 5.6 with focus on the main head; `cams.PUSH_RATE` 0.08 -> 0.15; `core.setup_render` shutter 0.5 -> 0.0;
-`post.py` PAUSE 0.45 -> 0.24, gap 0.14 -> 0.08, adelay 100 -> 0, TEMPO 1.08 -> 1.12-1.15 (voice gate).
+Defaults changed in v5 (old -> new): `frame_on` yaw None/0 -> +/-22, pitch 4 -> -4, lens 35 -> 45, push 0.06 -> 0.15,
+fstop 2.8 -> 5.6 with focus on the main head; motion blur 0.5 -> off (shotkit);
+`post.py` PAUSE 0.45 -> 0.24, gap 0.14 -> 0.08, adelay 100 -> 0; TEMPO stays 1.08 (1.12-1.15 is a voice-gate test).
+`cams.PUSH_RATE` was NOT changed (recipes keep their own rates; frame_on carries the new push).

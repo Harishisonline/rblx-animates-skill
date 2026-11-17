@@ -1,6 +1,6 @@
 ---
-name: rblx-animates
-description: Make original Roblox-style 3D story reels (9:16, 90-120 s) exactly the RBLX ANIMATES way, end to end - trend research, Blox City or "In this town / In this world" scripts, Alex narration, meme sound effects, music, Blender animation with the kit's characters, captions, the like/share/follow end card and the final render. Use this whenever someone wants a Roblox story video, a Blox City episode, an "In this town" reel, a Roblox animation for Instagram, TikTok or Shorts, or wants to research, script, voice, animate, render, check or fix one with the RobloxStories kit - even if they never name the skill.
+name: "rblx-animates"
+description: "Make original Roblox-style 3D story reels the RBLX ANIMATES way (In this town/world first, Blox City, dripdyl-style Big Game) and run the growth loop: check reach and stayed-to-watch, compare with dripdyl, fix gaps, update the skill."
 ---
 
 # RBLX ANIMATES: Roblox story video studio
@@ -151,6 +151,12 @@ Then write the script. The model for structure and density is `examples/EP3_frie
   Plan 15-20 per episode. They are never spoken.
 - **Reversal + callback:** the wronged kid wins by character, not revenge, and the last story line returns to the opening
   object ("The hole still fits a pencil." / "half my class ordered duck night-lights").
+- **What to make: `references/VIRAL_PLAYBOOK.md`.** Premises from the 7 families scored 1-5 on mute test, 3x
+  escalation, buildable with the kit, reverse-rule climax and shareability; propose only premises at >= 20/25 (show the
+  score on the white card), with a personal stake + clock early and a visible counter when the rule has a number. Write
+  with its beat template (90-110 s template B today; the 45-60 s template A and the 35-45 s "lite" format are a
+  **[decision]** waiting for the person), its first-sentence formulas and its ending formulas. Check COMPETITORS.md so a
+  premise is not a recent hit (copy mechanisms, never premises, titles or characters).
 - **First 3 seconds decide "stayed to watch" (check before approval, every format):** frame 0 is motion or the weirdest
   picture of the video (open on the climax image or the rule happening), never a static phone screen, a text wall or a
   character standing; sentence 1 is a world rule or an absurd consequence ("I did X and Y happened"), never backstory -
@@ -212,10 +218,11 @@ Gemini's verdict on our EP3/EP4 (2026-11-17): Alex reads dramatic and calm lines
 lines sound like the narrator. So tag every line with its emotion in `tts_script.txt` (`[excited]`, `[deadpan]`,
 `[whispers]`, `[shouting]`, `[sad]`) and make the first line the most energetic of the video. Do not change the voice or
 its settings for this; distinct side-character voices are a proposal waiting for the person's yes.
-Narration targets (`references/DRIPDYL_STYLE_GUIDE.md` section 8): voice from frame 0 (today `post.py` adds a 0.1 s
-`adelay`), speech gaps ~0.08 s, at most 4-8 meme pauses of 0.20-0.28 s (today 17 x 0.45 s), 3.8-4.2 words/s, one
-ElevenLabs request per beat with a tag on every line. `tts.py` still sends one request per script: chunking is a pending
-kit change, so until it lands, put the per-line tags in `tts_script.txt` and judge the take at the voice gate.
+Narration (kit v5, `references/DRIPDYL_STYLE_GUIDE.md` section 8): `tts.py` now sends **one request per line** of
+`tts_script.txt` with that line's tags (cached, so re-running only pays for changed lines; `RBX_TTS_MODE=single` = old
+way); `post.py` starts the voice on frame 0, shrinks gaps to 0.08 s and makes meme pauses 0.24 s (warns above 8; mark
+extra cues `"no_pause": true`). Targets: 3.8-4.2 words/s, first word <= 0.05 s. `TEMPO` stays 1.08 unless the person
+picks a faster take by ear (`audio/post_cfg.json` {"tempo": 1.12}).
 
 ```bash
 E=~/RobloxStories_tmp/<slug>; mkdir -p $E/audio $E/sfx $E/out $E/frames $E/frames_lo
@@ -273,12 +280,14 @@ The grammar that makes it look clean (each rule fixed a mistake the channel owne
 - **Readable props and screens:** phone/app/game screens are real UI images straight-on and big, never a number on a slab.
 - **Camera and motion follow `references/DRIPDYL_STYLE_GUIDE.md`** (per-beat camera recipes with real `cams.py`
   calls, framing, focus, blur, motion density, pre-render pass/fail checklist; Gemini-written, checked against the code).
-  EP4 root causes: 31 of 34 cameras were `frame_on` with no yaw (straight-on, pitch 4, 35 mm, 6 % push, f/2.8 focused
-  between characters), 52 `mo.idle()` vs 1 `mo.strike()`, shutter 0.5 on every shot including frame 0. Until the kit
-  defaults change: pass only the active character(s) to `frame_on` with `yaw=+/-22` (alternate), `pitch=-4`, `lens=45`,
-  `push=0.15`, `fstop=5.6` for two characters; call `look.motion_blur(0.0)` except on whips, crash zooms, throws and runs;
-  key a `strike()`/turn/gesture every 0.5-0.7 s; idle-only shots at most 15 % and never two in a row; use the beat
-  recipes (crash_zoom, whip_pan, dutch, impact_shake, run_follow, hero_low) the kit already has.
+  EP4 root causes: 31 of 34 cameras were `frame_on` straight-on (pitch 4, 35 mm, 6 % push, f/2.8 focused between
+  characters), 25 of 69 shots idle-only and 1 `strike()` in 96 s, shutter 0.5 on every shot including frame 0.
+  **Kit v5 (2026-11-17) makes the fixes the defaults:** `frame_on` alternates +/-22 deg yaw, pitch -4, 45 mm, 15 % push
+  from frame 1, f/2.8 solo / 5.6 two-shot, focus on `chars[0]`'s head; motion blur is off unless a shot calls
+  `look.motion_blur(0.35-0.5)` (whips, crash zooms, throws, runs); `mo.strike(ch, t, pose, **mo.SNAP)` for comedy hits.
+  You still choose: pass only the active character(s) to `frame_on`; use the beat recipes (crash_zoom, whip_pan, dutch,
+  impact_shake, run_follow, hero_low, ots) for at least a third of the shots and always for the hook; key a strike, turn
+  or gesture every 0.5-0.7 s; idle-only shots at most 15 % and never two in a row.
 - **Smooth like the winners (apply and judge on the contact sheet):** no linear keys - ease in-out for moves, overshoot
   ease-out for pops and reactions, ease-in for falls; 2-3 frames of anticipation before jumps, throws, kneels and pick-ups;
   snap into an impact or shock pose in 3-6 frames and hold 8-12 frames with tiny drift; 5-10 deg torso/shoulder counter-
@@ -306,6 +315,9 @@ The grammar that makes it look clean (each rule fixed a mistake the channel owne
 `render_lo.log`. Flags: FLOAT, CLIP, HALF, CUTOFF, TINY, NOTOUCH, PROPFLOAT, EYELINE, AWAY, BLOCKED. Fix every one or write
 down why it is acceptable (e.g. AWAY on a POV phone shot where the holder's head is hidden on purpose). Then make a 2 fps
 contact sheet and **look at it** - flags cannot see "uncanny". EP3 went from 280 flags to 31 accepted ones.
+Then run the viral gate: `python3 ~/RobloxStories/tools/ep_viral_check.py <ep>` (static, no render: idle-only shots,
+actions per second, recipe cameras, hook move, frame-0 blur, first word, words/s, silences, meme pauses, hook word time from
+`story.json` "hook_word", tagged TTS lines, outro). 0 FAIL before look-dev; EP4 fails 8 of its checks.
 
 **Going faster with a team (optional):** for 60+ shots, split the work: a Manager/QA agent owns `shots.py` (shared helpers)
 and the kit, Blender A owns `shots_a.py`, Blender B owns `shots_b.py` (`shots.py` execs both). They coordinate through an
@@ -341,6 +353,9 @@ while rendering (people ask "is it stuck?": answer with frame counts and the las
 
 ## 10. Delivery and wrap-up
 
+- Package it (`references/VIRAL_PLAYBOOK.md` section 5): YouTube title 2-6 words, Title Case, <= 1 emoji, no "PART 2",
+  no hashtags; description = one teaser line + #roblox #robloxstory #shorts; Instagram caption = a hook line + 4-5
+  hashtags; cover = the brightest frame with a clear face or giant prop; made-for-kids answered truthfully.
 - Deliver `out/final.mp4` (and the voice/mix files if asked). **Never post** to Instagram or YouTube without an explicit yes
   for that exact file. Record what was posted in `<ep>/POSTED.md` when they say they posted.
 - Cloud backup: before saying a file is in Google Drive, check the Drive app is running and the file is **in the cloud**
@@ -378,6 +393,13 @@ The goal is a monetized channel, so every step ends in a decision that moves a m
    first 3 s. If the answer is only a summary, ask it to "write the full result here in the chat". Check every claim you
    can by measurement (words/s and silences from `words.json`, cuts with ffmpeg scene detection, outro length, a 0-3 s
    frame strip you look at) and mark the rest "Gemini". 2026-11-17 result: `RESEARCH_2026-11-17_gap_vs_dripdyl.md`.
+   To let Gemini judge our production code, give it the public raw GitHub URLs of the repo files
+   (`https://raw.githubusercontent.com/Harishisonline/rblx-animates-skill/main/...`). Its Connected Folders did not reach
+   the web chat, github.com pages made it ask for a sign-in, and on a later turn raw URLs were blocked too: then paste the
+   key code excerpts into the chat.
+   To let Gemini judge our production code, give it the public raw GitHub URLs of the repo files
+   (`https://raw.githubusercontent.com/Harishisonline/rblx-animates-skill/main/...`); its Connected Folders did not reach
+   the web chat, and github.com pages made it ask for a sign-in.
 4. **Find and learn from videos that already win it:** section 2 (outliers, yt-dlp numbers, Gemini Task chat). Write each
    finding as `rule | evidence (IDs + numbers) | level | test | decision rule`. Levels: proven (our own test won) > observed
    (3+ independent channels) > hypothesis. Only proven and observed rules become skill defaults; hypotheses become
@@ -388,7 +410,8 @@ The goal is a monetized channel, so every step ends in a decision that moves a m
    After a yes: edit the single source of truth (numbers in `FORMATS.json`, endings in `ENDING_RULE.md`, formats in their
    files, research in a dated file), propose the `SKILL.md` edit with the skill-update card, append to `LESSONS.md`, bump
    the kit version and `HANDOFF.md`.
-6. **Ship.** Weekly batch of 5-7 premises scored on premise family, stake + clock in sentence 1, visual hook in frame 1,
+6. **Ship** (`references/VIRAL_PLAYBOOK.md` sections 5-6; proposed cadence 2 full + 2 lite Shorts a week **[decision]**).
+   Weekly batch of 5-7 premises scored on premise family, stake + clock in sentence 1, visual hook in frame 1,
    difference from our last 10 videos, cost; at least one follow-up to our best performer and one live experiment. Each goes
    through the normal gates. Package: 3 titles, a first frame that stops a scroll on mute, the same file to Shorts and Reels,
    the audience question answered truthfully. Log posts and schedule the 48 h check.
@@ -414,6 +437,7 @@ own story, visual hook, sets and cast.
 | `references/LESSONS.md` | before any work: every mistake already paid for |
 | `references/GROWTH_LOOP.md`, `CHANNEL_LOG.md`, `COMPETITORS.md`, `EXPERIMENTS.md` | growth loop, "check my reach", monetization |
 | `RESEARCH_2026-11-17_dripdyl_gemini.md`, `RESEARCH_2026-11-17_gap_vs_dripdyl.md`, `RESEARCH_2026-11-17_viral_roblox_shorts.md` | viral research, gaps, Big Game format |
+| `references/VIRAL_PLAYBOOK.md` | premises, scoring, script templates, endings, packaging, posting plan |
 | `references/DRIPDYL_STYLE_GUIDE.md` | every shots.py, tts_script.txt and audio config (camera, motion, narration) |
 | `examples/EP2_*`, `examples/EP3_*` | scripts, cue files, shots, QA report of finished episodes |
 | `kit/SKILL.md` (installed as `~/RobloxStories/SKILL.md`) | the kit's API in depth |

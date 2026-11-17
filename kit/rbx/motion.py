@@ -26,6 +26,9 @@ MOVE = 4           # anticipation extreme -> hit (snappy 3-5 f transitions)
 SETTLE = 5         # overshoot -> settle (4-6 f)
 OVER = 0.12        # overshoot 10-15 %
 LEAD = 2           # head leads body by 2-3 f; eyes lead head by 2 f
+# v5 (DRIPDYL guide): timing presets for strike(ch, t, pose, **SNAP)
+NORMAL = dict(antic=4, move=4, over=0.12, settle=5)   # everyday gesture / turn
+SNAP = dict(antic=2, move=3, over=0.18, settle=3)     # comedy hit, reaction pop
 RUN_CYCLE = 12     # frames per full run cycle (two steps)
 WALK_CYCLE = 24    # frames per full walk cycle
 

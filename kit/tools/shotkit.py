@@ -18,7 +18,41 @@ STUDIO = os.path.dirname(HERE)
 if STUDIO not in sys.path:
     sys.path.insert(0, STUDIO)
 import rbx
-rbx.ASSETS = os.path.join(STUDIO, "assets")
+
+
+def _assets_readable(p, timeout=4.0):
+    """EP4 2026-11-16: Google Drive (assets symlink) can hang every file READ (listing still works) -> Blender froze
+    for ever in an image mmap. Probe one small read in a daemon thread with a timeout."""
+    import threading
+    out = {}
+
+    probes = ("faces/harry_eyes.png", "tex/pbr/planks/diff.jpg", "tex/pbr/plaster/diff.jpg", "tex/pbr/concrete/diff.jpg")
+
+    def rd():
+        try:
+            for q in probes:                     # some files can be cached, others hang: probe a few (faces + pbr)
+                with open(os.path.join(p, q), "rb") as f:
+                    f.seek(-4096, 2); out["n"] = out.get("n", 0) + len(f.read(4096))
+        except Exception as e:
+            out["e"] = repr(e)
+        out["done"] = True
+    th = threading.Thread(target=rd, daemon=True); th.start(); th.join(timeout)
+    return bool(out.get("done")) and out.get("n", 0) > 0 and "e" not in out
+
+
+_ASSETS = os.environ.get("RBX_ASSETS") or os.path.join(STUDIO, "assets")
+rbx.ASSETS_FALLBACK = False
+if not os.environ.get("RBX_ASSETS") and not _assets_readable(_ASSETS):
+    _TMP = os.path.join(os.path.dirname(STUDIO), "RobloxStories_tmp")
+    for _LOCAL in (os.environ.get("RBX_ASSETS_FALLBACK", ""), os.path.join(_TMP, "kit_assets_local"),
+                   os.path.join(_TMP, "rblx-animates-skill", "kit", "assets")):
+        if _LOCAL and os.path.isdir(_LOCAL):
+            _pbr = os.path.exists(os.path.join(_LOCAL, "tex", "pbr", "planks", "diff.jpg"))
+            print("SHOTKIT WARNING: kit assets unreadable (Google Drive stuck?) -> LOCAL FALLBACK", _LOCAL,
+                  "(PBR textures present: same CC0 Poly Haven set)" if _pbr else "(NO PBR textures = flat colours: lo-res only)")
+            _ASSETS = _LOCAL; rbx.ASSETS_FALLBACK = "pbr" if _pbr else True
+            break
+rbx.ASSETS = _ASSETS
 from rbx.core import *          # noqa: F401,F403  (reset, setup_render, Cam, mat, box, light, sfx, ...)
 from rbx import core, chars, sets, locs, fx, acting, world as W, world2 as W2   # noqa: F401
 from rbx import look, cams, props2 as P
@@ -94,7 +128,7 @@ class Video:
         S = self.shots[i]
         reset()
         CUES.clear()
-        setup_render(F(S["t0"]), F(S["t1"]) - 1, samples=samples, pct=pct)
+        setup_render(F(S["t0"]), F(S["t1"]) - 1, samples=samples, pct=pct, blur=False)   # v5 (DRIPDYL guide): blur off unless the shot asks
         _lookmod.EXPOSURE = 0.0
         _lookmod.VIEW_LOOK = None; _lookmod.SHUTTER = None; _lookmod.EXTRA_COMP.clear(); _lookmod.PRE_COMP.clear()   # v3 per-shot look state
         from rbx import cast as _cast
