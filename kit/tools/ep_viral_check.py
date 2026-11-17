@@ -100,10 +100,18 @@ if W:
             rep('hook/twist word time', t <= 2.5, f'"{hw}" at {t:.2f} s', '<= 2.5 s')
     else:
         rep('hook/twist word time', False, 'story.json has no "hook_word"', 'set it', warn=True)
+    # v5.1 (owner 2026-11-18): In-this-town = no like/share/follow outro; Blox City keeps it.
+    fmt = str(st.get('format', '')).lower(); town = ('town' in fmt or 'world' in fmt)
     li = [i for i, w in enumerate(W) if re.sub(r'\W', '', w['word'].lower()) == 'like']
-    if li:
-        out = W[-1]['end'] - W[li[-1]]['start']
-        rep('like/share/follow outro', False, f'{out:.1f} s', 'owner decision (winners use none)', warn=True)
+    out = (W[-1]['end'] - W[li[-1]]['start']) if li else 0.0
+    if town:
+        rep('no like/share/follow outro (In this town)', not li, f'{out:.1f} s' if li else 'none', 'none')
+    elif not fmt:
+        rep('story.json format', False, 'missing', 'in_this_town / blox_city', warn=True)
+    tier = str(st.get('tier', 'long')).lower()
+    lo, hi = (80, 120) if tier == 'long' else (35, 60)
+    rt = W[-1]['end'] + 0.6
+    rep(f'runtime ({tier})', lo <= rt <= hi, f'{rt:.0f} s', f'{lo}-{hi} s')
 else:
     rep('words.json', False, 'missing', 'run tts.py, words.py, post.py')
 

@@ -34,7 +34,7 @@ def draw_caption(img,words,scale=1.0):
     txt=' '.join(words); 
     parts=[(w, '#FFD21E' if re.sub(r'[^A-Z]','',w) in EMPH or w in EMPH else '#FFFFFF') for w in words]
     sp=d.textlength(' ',font=FONT); widths=[d.textlength(w,font=FONT) for w,_ in parts]
-    tw=sum(widths)+sp*(len(parts)-1); x=(Wd-tw)/2; y=int(Ht*(0.68 if CUR_T[0]>=W[END['like']]['start']-0.05 else 0.65))
+    tw=sum(widths)+sp*(len(parts)-1); x=(Wd-tw)/2; y=int(Ht*(0.68 if END and CUR_T[0]>=W[END['like']]['start']-0.05 else 0.65))   # v5.1 (owner 2026-11-18): END may be None
     for (w,c),ww in zip(parts,widths):
         d.text((x,y),w,font=FONT,fill=c,stroke_width=9,stroke_fill='#000000',anchor='lm'); x+=ww+sp
 # ---- icons (our own flat shapes)

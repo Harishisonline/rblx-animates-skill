@@ -6,8 +6,8 @@ description: "Make original Roblox-style 3D story reels the RBLX ANIMATES way (I
 # RBLX ANIMATES: Roblox story video studio
 
 This skill reproduces the production line behind the Instagram channel @rblxanimates: original, blocky Roblox-style 3D story
-reels, 9:16, 90-120 seconds, narrated by one upbeat voice, with meme sound effects, burned-in captions and an end card that
-asks viewers to like, share, follow and comment, and a growth loop that measures the channel, compares it side by side
+reels, 9:16 (In-this-town: long 80-120 s and short 35-60 s; Blox City storylines 90-120 s), narrated by one fast, upbeat
+voice, with meme sound effects, burned-in captions, a like/share/follow end card on Blox City episodes only, and a growth loop that measures the channel, compares it side by side
 with Shorts that are winning right now (benchmark: @DripDyl) and updates this skill from what works. The quality bar is the two finished episodes in `examples/`:
 EP2 "The Poor Boy Who Bought the School" and EP3 "I Told ONE Secret. By Lunch, Everyone Knew."
 
@@ -71,7 +71,7 @@ overreaction]" ("I stepped off a couch and 50 firefighters blasted me with fire 
 biggest game of [playground game]", "The rules were simple." (3 strikes, last one standing wins $1,000,000), a roster of
 absurd rivals (one hasn't moved since 2019, a grandma, a 5x champion), traps and eliminations each with a deadpan tag
 ("He went down." / "Worth it."), the narrator wins by **noticing a small detail**, a host fake-out, and a 3-8-word home
-callback gag ("I've been up here for 3 days."). dripdyl runs 130-165 s at 3.7-4.2 words/s; our runtime stays 90-120 s unless the person approves longer. Original games and gags only.
+callback gag ("I've been up here for 3 days."). dripdyl runs 130-165 s at 3.7-4.2 words/s; ours use the long tier (80-120 s). Original games and gags only.
 
 All formats share the narrator, the ending rule (`references/ENDING_RULE.md`), the look and the kit.
 
@@ -140,22 +140,26 @@ If the person did not name a topic, propose 3 one-line premises tied to the rese
 Then write the script. The model for structure and density is `examples/EP3_friend_secret/SCRIPT_AND_PLAN.md`
 (and EP2's). What makes these work:
 
-- **Length:** 300-370 spoken words. Alex runs about 197 words per minute, plus about 0.45 s per meme pause, which lands at
-  90-120 s. Count words with a script, don't guess; if over 120 s, shorten pauses first, then cut a line.
+- **Length by format and tier (owner 2026-11-18; numbers in `FORMATS.json`):** In-this-town **long** 80-120 s
+  (310-450 words, 2 a week) and **short** 35-60 s (140-230 words, as many as possible); Blox City 90-120 s (300-370
+  words). Kit v5.1 delivers ~3.8-4.2 words/s for In-this-town (TEMPO 1.12, 0.24 s meme pauses). Write `story.json` with
+  `"format"` (`in_this_town` / `blox_city`), `"tier"` (`long` / `short`) and `"hook_word"` (the twist word that must land
+  by 2.5 s); the kit reads them. Count words with a script, don't guess; if over the tier, cut pauses first, then a line.
 - **Hook = the whole promise in one breath:** "I told my best friend one secret. By lunch, the whole school knew. And he
   got paid for it." The viewer decides in two seconds.
 - **One line = one beat**, each beat a picture the camera can show. Concrete, visual details (a duck night-light, a shoe
   with a hole a pencil fits through) carry the story and become the props and callbacks.
-- **The narrator reads everything**, quoted character lines included. No character voices.
+- **The narrator reads everything**, quoted character lines included. No character voices (owner, re-confirmed 2026-11-18).
 - **Meme SFX marks** `[RECORD SCRATCH]`, `[BRUH]`, `[FAHHH]`... sit after a full stop, in a word gap, never on a word.
-  Plan 15-20 per episode. They are never spoken.
+  Plan 15-20 per episode, but at most 8 get a pause (0.24 s); the others play in word gaps with `"no_pause": true` in
+  `meme_cues.json`. They are never spoken.
 - **Reversal + callback:** the wronged kid wins by character, not revenge, and the last story line returns to the opening
   object ("The hole still fits a pencil." / "half my class ordered duck night-lights").
 - **What to make: `references/VIRAL_PLAYBOOK.md`.** Premises from the 7 families scored 1-5 on mute test, 3x
   escalation, buildable with the kit, reverse-rule climax and shareability; propose only premises at >= 20/25 (show the
   score on the white card), with a personal stake + clock early and a visible counter when the rule has a number. Write
-  with its beat template (90-110 s template B today; the 45-60 s template A and the 35-45 s "lite" format are a
-  **[decision]** waiting for the person), its first-sentence formulas and its ending formulas. Check COMPETITORS.md so a
+  with its beat template (long tier: template B stretched to 80-120 s; short tier: template A 45-60 s or the 35-45 s
+  "lite" format - owner 2026-11-18), its first-sentence formulas and its ending formulas. Check COMPETITORS.md so a
   premise is not a recent hit (copy mechanisms, never premises, titles or characters).
 - **First 3 seconds decide "stayed to watch" (check before approval, every format):** frame 0 is motion or the weirdest
   picture of the video (open on the climax image or the rule happening), never a static phone screen, a text wall or a
@@ -170,15 +174,16 @@ Then write the script. The model for structure and density is `examples/EP3_frie
   one visual rule or twist; earnest moral arcs alone read as predictable (Gemini scored our premise 5.5 vs 9.5).
 - **Pace and dead air:** measured 2026-11-17: EP3 3.3 and EP4 3.45 words/s overall with 17-18 meme pauses (~8 s of
   silence); dripdyl 3.7-4.2, In-this-world hits 4.1-4.9 with almost no dead air. Keep at most 6-8 meme pauses, cut every
-  other silence over 0.15 s except a deliberate 0.25 s beat before a punchline, and test a faster take at the voice gate
-  (the person decides by ear). Count words and measure the take; never assume.
+  other silence over 0.15 s except a deliberate 0.25 s beat before a punchline. The owner wants faster takes like the
+  viral channels (2026-11-18): kit v5.1 uses TEMPO 1.12 for In-this-town; still play the sample. Measure, never assume.
 - **Title (2026-11-17 gap):** 2-6 words, Title Case, at most 1 emoji, no "PART 2", no hashtags in the title (they go in
   the description). Ours ran to 98 characters in caps and got cut off in the feed.
-- **Ending (every video, every format):** "Like, share and follow for more." then a one-word, two-option comment question:
-  "Would you give Max a second chance? Comment TRUST or BLOCK." One-tap answers get comments; themed phrases got zero.
-  The winners end on a callback gag, an emotional truth line or a cliffhanger, with no CTA; ours spends the last 5.2-5.8 s
-  on the CTA, which Gemini ranks as our costliest gap. Until the person decides, put the story's last line right before
-  "Like, share..." and keep the CTA as short as possible.
+- **Ending depends on the format (owner 2026-11-18, `references/ENDING_RULE.md` v2):**
+  - **In this town / In this world: no like/share/follow line and no "Comment X or Y".** End on the last story line - a
+    3-8-word callback gag, a truth line, a rule-reversal twist or a cliffhanger (VIRAL_PLAYBOOK ending formulas) - and cut.
+    Comments come from the story (mystery, loophole, easter egg). The kit draws no end card without the like line.
+  - **Blox City storylines keep it:** "Like, share and follow for more." then a one-word, two-option question: "Would you
+    give Max a second chance? Comment TRUST or BLOCK." (one-tap answers get comments; themed phrases got zero).
 - **TTS spelling:** the voice model mangles "Blox". Write "Blocks City" / "Blocks Tea" in `tts_script.txt` only; captions and
   the script keep "Blox".
 
@@ -217,12 +222,13 @@ laugh. Rules and stakes slightly slower, action fast. For emotional storylines (
 Gemini's verdict on our EP3/EP4 (2026-11-17): Alex reads dramatic and calm lines "at the same flat energy", and quoted
 lines sound like the narrator. So tag every line with its emotion in `tts_script.txt` (`[excited]`, `[deadpan]`,
 `[whispers]`, `[shouting]`, `[sad]`) and make the first line the most energetic of the video. Do not change the voice or
-its settings for this; distinct side-character voices are a proposal waiting for the person's yes.
+its settings for this; no side-character voices (owner 2026-11-18).
 Narration (kit v5, `references/DRIPDYL_STYLE_GUIDE.md` section 8): `tts.py` now sends **one request per line** of
 `tts_script.txt` with that line's tags (cached, so re-running only pays for changed lines; `RBX_TTS_MODE=single` = old
 way); `post.py` starts the voice on frame 0, shrinks gaps to 0.08 s and makes meme pauses 0.24 s (warns above 8; mark
-extra cues `"no_pause": true`). Targets: 3.8-4.2 words/s, first word <= 0.05 s. `TEMPO` stays 1.08 unless the person
-picks a faster take by ear (`audio/post_cfg.json` {"tempo": 1.12}).
+extra cues `"no_pause": true`). Targets: 3.8-4.2 words/s, first word <= 0.05 s. `TEMPO` is 1.12 for In-this-town (owner
+2026-11-18: faster takes keep viewers curious to the end) and 1.08 for Blox City, from `story.json` "format";
+`audio/post_cfg.json` {"tempo": x} overrides. The person still hears the sample before production.
 
 ```bash
 E=~/RobloxStories_tmp/<slug>; mkdir -p $E/audio $E/sfx $E/out $E/frames $E/frames_lo
@@ -231,7 +237,8 @@ ln -s $E ~/RobloxStories/videos/<slug>
 cd ~/RobloxStories/tools/ep_audio && export RBX_HOME=~/RobloxStories EP=$E
 python3 tts.py && python3 words.py && python3 post.py      # raw.mp3 -> words.json, pauses.json, voice.wav (-14 LUFS)
 ```
-`words.py` must print `mismatch []`. `post.py` prints duration and wpm; 90-120 s or fix the script. Send the voice take
+`words.py` must print `mismatch []`. `post.py` prints duration, first word and words/s; the runtime must fit the tier
+(`story.json`) or fix the script. Send the voice take
 (as mp3) to the person and wait. About 1,800 characters of credits per episode.
 
 ---
@@ -341,7 +348,7 @@ cd ~/RobloxStories && zsh tools/ep_final.sh <slug> 32          # one Blender run
 python3 tools/ep_eta.py videos/<slug>                          # ETA from screen time
 zsh tools/ep_finish.sh ~/RobloxStories_tmp/<slug>              # captions + end card + audio -> out/final.mp4
 ```
-Test the overlay before the full finish: `tools/ep_captions.py <ep> test t:0 t:30 t:<Like time>`. The end card is automatic:
+Test the overlay before the full finish: `tools/ep_captions.py <ep> test t:0 t:30 t:<Like time>`. The end card (Blox City only) is automatic when the script has the like ... follow line; In-this-town videos have none:
 heart on "Like", share on "share", a cursor clicks + FOLLOW on "follow", a comment bubble on "Comment" and the two answer
 buttons, all centred, with captions moved down to y 0.68.
 
@@ -410,7 +417,8 @@ The goal is a monetized channel, so every step ends in a decision that moves a m
    After a yes: edit the single source of truth (numbers in `FORMATS.json`, endings in `ENDING_RULE.md`, formats in their
    files, research in a dated file), propose the `SKILL.md` edit with the skill-update card, append to `LESSONS.md`, bump
    the kit version and `HANDOFF.md`.
-6. **Ship** (`references/VIRAL_PLAYBOOK.md` sections 5-6; proposed cadence 2 full + 2 lite Shorts a week **[decision]**).
+6. **Ship** (`references/VIRAL_PLAYBOOK.md` sections 5-6; cadence decided 2026-11-18: 2 long + as many short videos as
+   possible a week).
    Weekly batch of 5-7 premises scored on premise family, stake + clock in sentence 1, visual hook in frame 1,
    difference from our last 10 videos, cost; at least one follow-up to our best performer and one live experiment. Each goes
    through the normal gates. Package: 3 titles, a first frame that stops a scroll on mute, the same file to Shorts and Reels,

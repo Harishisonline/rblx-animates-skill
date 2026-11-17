@@ -9,7 +9,11 @@ def _n(w):
 
 
 def ending(W):
-    iL = max(i for i, w in enumerate(W) if _n(w["word"]) == "like")
+    # v5.1 (owner 2026-11-18): In-this-town videos have no like/share/follow ending -> no end card (None).
+    likes = [i for i, w in enumerate(W) if _n(w["word"]) == "like"]
+    if not likes or not any(_n(w["word"]) == "follow" for w in W[likes[-1]:]):
+        return None
+    iL = likes[-1]
     def after(word, start):
         return next(i for i in range(start, len(W)) if _n(W[i]["word"]) == word)
     iS = after("share", iL); iF = after("follow", iL); iC = after("comment", iL)
@@ -35,6 +39,7 @@ def cursor(s):
     d.polygon([(x*s,y*s) for x,y in p],fill='#ffffff',outline='#000000',width=max(2,s//22))
     return im
 def draw(img,t,W,D,icon,Wd=1080,Ht=1920):
+    if ending(W) is None: return img   # v5.1: no end card
     E = ending(W); tL, tS, tF, tC = (W[E[k]]['start'] for k in ('like', 'share', 'follow', 'comment'))
     d=ImageDraw.Draw(img)
     row_fade = 1.0 if t<tC-0.15 else max(0.0,1-(t-(tC-0.15))/0.2)

@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-11-18 v5.1 - owner decisions: no CTA in In-this-town, faster takes, long/short tiers
+- `tools/ep_endcard.ending()` returns None when the script has no "like ... follow" line -> no end card;
+  `ep_captions.py` handles it (captions stay at y 0.65). Blox City scripts keep the end card (ENDING_RULE.md v2).
+- `tools/ep_audio/post.py`: TEMPO default 1.12 when story.json "format" is in_this_town/in_this_world (Blox City 1.08).
+  Tested on EP4's raw voice as in_this_town: 88.9 s, 3.70 words/s, first word 0.02 s (before per-line tags).
+- `tools/ep_viral_check.py`: In-this-town FAILS on any like/share/follow outro; runtime check by story.json "tier"
+  (long 80-120 s, short 35-60 s).
+- `docs/FORMATS.json` in_this_world: length 80-120 s, tiers long/short, cadence 2 long + many short, cta none, tts/tempo/
+  tone updated (old 2026-11-14 calm/no-tag reading superseded). `docs/ENDING_RULE.md` v2.
+Backups: *.bak_v51.
+
 ## 2026-11-17 v5.0 - DRIPDYL guide defaults (camera, blur, voice edit, per-line TTS, viral gate)
 Source: docs/DRIPDYL_STYLE_GUIDE.md (Gemini read the repo; Claude checked every claim against this code).
 **Tested without rendering:** frame_on built in headless Blender (lens 45, f/2.8 solo / 5.6 two-shot, side alternates,

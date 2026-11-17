@@ -1,5 +1,5 @@
 {
- "_doc": "ONE source of truth for per-format defaults (v3.7, 2026-11-14). Read by tools/format_preset.py, pacing.py, hype_lint.py, grade_check.py, qa_gate.py. Evidence tags: measured = numbers we measured on reference videos; inferred = our reading/convention; UNVERIFIED = not confirmed by a render or a listen. Sources: docs/research/{NARRATION_HYPE,MUSIC_RESEARCH,REF_IG_Dfe8B5Hs3G6,REF_IG_Dfs43n3oWqx,GEMINI_AUDIO_NOTES}.md.",
+ "_doc": "ONE source of truth for per-format defaults (v3.7, 2026-11-14). Read by tools/format_preset.py, pacing.py, hype_lint.py, grade_check.py, qa_gate.py. Evidence tags: measured = numbers we measured on reference videos; inferred = our reading/convention; UNVERIFIED = not confirmed by a render or a listen. Sources: docs/research/{NARRATION_HYPE,MUSIC_RESEARCH,REF_IG_Dfe8B5Hs3G6,REF_IG_Dfs43n3oWqx,GEMINI_AUDIO_NOTES}.md. | v5.1 2026-11-18: in_this_world tiers/length/cta/tts/tempo updated from owner decisions.",
  "default": "in_this_world",
  "aliases": {
   "in_this_town": "in_this_world",
@@ -47,10 +47,10 @@
   "in_this_world": {
    "what": "'In this world / In this town, X makes you Y' first-person mystery/dystopian story (channel default)",
    "length_s": [
-    60,
+    80,
     120
    ],
-   "length_note": "up to 120 s (supersedes the old 80-90 s rule); EP1 approved take 108.7 s",
+   "length_note": "owner 2026-11-18: LONG videos 80-120 s (like dripdyl, 2 a week) + SHORT videos 35-60 s (many a week); story.json 'tier': 'long'|'short'",
    "look": {
     "default": "ref_matte",
     "day_exterior": "ref_day",
@@ -65,7 +65,8 @@
     "bed": "assets/music/inthisworld_bed.wav",
     "speed": 1.0,
     "status": "user rule 2026-11-14 (approved AI-world track); its BPM/source licence UNVERIFIED",
-    "never": "finish.py --music (1.5x) or a generated score unless the user asks"
+    "never": "finish.py --music (1.5x) or a generated score unless the user asks",
+    "note_2026_11_18": "unchanged for now; music changes per act will be asked to Gemini later (owner)"
    },
    "narration": {
     "wpm_delivered": [
@@ -88,9 +89,9 @@
     "spoken_sfx_per10": 0.0,
     "spoken_sfx_style": "NONE in this format (0 spoken SFX, 0 ad-libs, 0 exclamation marks in both refs). Real SFX only, never spoken.",
     "whisper_beats": 0,
-    "cta": "NO question CTA in the refs: end on the twist/reveal line (R1) or a callback to the opening image (R2), 2-6 words, then cut.",
-    "tts": "voice_preset intown_v1: Alex yl2ZDV1MzN4HbQJbMihG, eleven_multilingual_v2, stability 0.55, similarity 0.75, style 0.0, speed 1.15, paragraph takes <= 900 chars, no tags, plain punctuation",
-    "voice_preset": "intown_v1 (measured closest of 4 test takes to the reels, closeness 0.84 mean |z|; voice_tests/intown/NOTES.md). hype_v3 = superseded for this format, still selectable",
+    "cta": "NONE (owner 2026-11-18): no like/share/follow ending and no 'Comment X or Y' in this format; end on the last story line (callback, truth line, twist or cliffhanger), hard cut. Blox City keeps its CTA (ENDING_RULE.md).",
+    "tts": "kit v5: Alex yl2ZDV1MzN4HbQJbMihG, eleven_v3, stability 0.0, similarity 0.75, style 0.25, speaker boost (VOICE_SPEC fixed decision); tools/ep_audio/tts.py one request per tts_script.txt line with that line's audio tags ([excited], [deadpan], [urgent], [whispers], [shouting]...); no side-character voices (owner 2026-11-18).",
+    "voice_preset": "SUPERSEDED: intown_v1 (eleven_multilingual_v2) was a 2026-11-14 test; the fixed narrator is Alex on eleven_v3 (VOICE_SPEC.md), kit v5 tts.py",
     "tts_raw_wpm_v3_alex": [
      179,
      191
@@ -101,19 +102,25 @@
     ],
     "f0_range_st_min": 10,
     "measured_2026_11_14": "EP1 orig 184.7 wpm, f0 range 13.9 st, f0 sd 4.43, RMS sd 4.44 dB, 10-s energy spread 1.4 dB; mosquito_town (liked) 258 wpm, 21.5 st, 6.95, 7.45 dB; hype test B (per-line takes, st 0.0, style .45 + post) 264 wpm, 20.0 st, 6.14 (voice_tests/NOTES.md)",
-    "tone": "calm first-person storyteller (AI TTS, light/young register F0 med 181-203 Hz, F0 range 10.6-17 st, sd 3.5-5.2 st); NOT hyped: no shouting, no tags like [excited]",
-    "pauses": "sentence gaps 0.1-0.4 s (median 0.28 in R1), none > 0.6 s; LRA 0.8-1.9 LU",
+    "tone": "v5.1 (owner 2026-11-18, superseding the 2026-11-14 'calm, no tags' reading): faster, expressive first-person storyteller like dripdyl - expressive setups, flat deadpan payoffs, per-line eleven_v3 tags ([excited], [deadpan], [urgent], [whispers]); see DRIPDYL_STYLE_GUIDE.md section 8",
+    "pauses": "kit v5.1: speech gaps ~0.08 s, one deliberate 0.22-0.28 s beat before a punchline or twist",
     "earlier_assumptions_superseded": "262-293 wpm, hype, spoken SFX 0.6/10 s, 1 exclamation/10 s, whisper beat, 'EXPOSE or PROTECT?' CTA, f0 range >= 18 st = generic Roblox shorts, not this format",
     "format_spec": "engine/docs/research/INTOWN_FORMAT.md",
     "script_lint": "intown_lint",
     "script_lint_note": "tools/intown_lint.py (hype_lint.py delegates to it for this format). Measured on R1/R2: both PASS.",
-    "post": "gaps > 0.34 s -> 0.30 s by alignment, atempo to 257 wpm (C needed 1.235), HPF 70, comp 1.5:1 @ -12 dB, limiter, 120 ms lead-in, two-pass loudnorm -14 LUFS / -1.5 dBTP, no presence boost",
+    "post": "kit v5.1 post.py: gaps > 0.16 s -> 0.08 s, meme pauses 0.24 s (<= 8), no lead-in, TEMPO 1.12, HPF 80, presence +3 dB @ 4 kHz, comp 3:1 @ -20 dB, loudnorm -14 LUFS / -1.5 dBTP",
     "measured_intown_v1_2026_11_14": "test C (166 words) post: 257 wpm, F0 med 157 Hz (reels 181-203: Alex sits ~25 Hz low), F0 range 12.9 st, sd 3.83, RMS sd 6.39 dB, silence gaps med 0.22 / max 0.29 s, voice LRA 1.5 LU, first word 0.12 s. Nobody has listened.",
     "tts_raw_wpm_v2_alex_speed115": [
      180,
      208
     ],
-    "tts_raw_wpm_note": "180 raw incl. ~1 s sentence pauses, 208 after gap cut; v3 Alex 198-211 raw at stability 0.5-1.0 (tts_raw_wpm_v3_alex 179-191 was the hype test at stability 0.0-0.3)"
+    "tts_raw_wpm_note": "180 raw incl. ~1 s sentence pauses, 208 after gap cut; v3 Alex 198-211 raw at stability 0.5-1.0 (tts_raw_wpm_v3_alex 179-191 was the hype test at stability 0.0-0.3)",
+    "tempo": "post.py TEMPO 1.12 for this format (owner 2026-11-18: faster takes like the viral channels); target 3.8-4.2 words/s delivered, first word <= 0.05 s, meme pauses <= 8 x 0.24 s",
+    "wps_delivered": [
+     3.8,
+     4.2
+    ],
+    "post_atempo_note": "post_atempo 1.35-1.42 was the 2026-11-14 hype test on raw v3 takes; kit v5.1 uses TEMPO 1.12 on per-line takes (test at the voice gate)"
    },
    "cutting": {
     "avg_shot_s": [
@@ -170,7 +177,32 @@
     "gasp"
    ],
    "faces": "hard decal swaps on beats; reaction ladder 6-8 f/step; eye darts every 4-5 f in fear holds; blinks 2.5-4 s; no narrator lip-sync (UNRENDERED)",
-   "branding": "In-this-town videos must NOT use 'Blox Town'/'Blox City' branding. 'Blox City' is reserved for later storyline videos (the user will brief them)."
+   "branding": "In-this-town videos must NOT use 'Blox Town'/'Blox City' branding. 'Blox City' is reserved for later storyline videos (the user will brief them).",
+   "tiers": {
+    "long": {
+     "length_s": [
+      80,
+      120
+     ],
+     "words": [
+      310,
+      450
+     ],
+     "per_week": 2
+    },
+    "short": {
+     "length_s": [
+      35,
+      60
+     ],
+     "words": [
+      140,
+      230
+     ],
+     "per_week": "as many as possible"
+    }
+   },
+   "cadence": "owner 2026-11-18: 2 long + many short per week"
   },
   "horror": {
    "what": "dread / creature / 'every night it came closer' story",

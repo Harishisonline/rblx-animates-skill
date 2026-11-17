@@ -251,3 +251,9 @@ once vs 52 idle(); setup_render shutter 0.5 on every shot; tts.py one request wi
 rule: kit v5 defaults (3/4 alternating yaw, low pitch, 45 mm, 15 % push from frame 1, head focus, blur off, per-line TTS
 tags, pause 0.24, no lead); follow docs/DRIPDYL_STYLE_GUIDE.md | check: tools/ep_viral_check.py <ep> has 0 FAIL before
 look-dev
+
+2026-11-18 | Owner decisions changed the In-this-town defaults (no like/share/follow ending, 80-120 s long + 35-60 s short,
+faster takes, no side-character voices) while the kit still forced an end card (ep_endcard crashed without "like") and
+a 1.08 tempo | root cause: the ending and tempo were hard-wired for all formats | rule: format decides - story.json
+"format" + "tier"; no end card without a like...follow line; TEMPO 1.12 for In-this-town | check: ep_viral_check FAILS an
+In-this-town outro and checks the tier runtime

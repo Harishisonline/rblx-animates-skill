@@ -11,7 +11,10 @@ PAUSE=opt('pause','RBX_PAUSE',0.24)     # meme pause length (v4: 0.45)
 GAP=opt('gap','RBX_GAP',0.08)           # any silence longer than DET is shrunk to GAP (v4: 0.14)
 DET=opt('detect','RBX_DET',0.16)        # silence detection length (v4: 0.22)
 LEAD=opt('lead','RBX_LEAD',0.0)         # silence before the first word (v4: 0.10)
-TEMPO=opt('tempo','RBX_TEMPO',1.08)     # voice speed-up; a change is decided by ear at the voice gate
+_ST=json.load(open(D+'story.json')) if os.path.exists(D+'story.json') else {}
+_FMT=str(_ST.get('format','')).lower()
+# v5.1 (owner 2026-11-18): faster takes for In-this-town like the viral channels (1.12); Blox City keeps 1.08.
+TEMPO=opt('tempo','RBX_TEMPO',1.12 if ('town' in _FMT or 'world' in _FMT) else 1.08)
 MAXP=int(opt('max_pauses','RBX_MAXP',8))
 src=A+'raw.wav' if os.path.exists(A+'raw.wav') else A+'raw.mp3'   # v5: tts.py chunk mode writes raw.wav (no mp3 delay)
 subprocess.run(['ffmpeg','-v','error','-y','-i',src,'-ac','1','-ar',str(SR),'-f','f32le',A+'raw.f32'],check=True)
