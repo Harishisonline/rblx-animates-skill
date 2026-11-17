@@ -212,6 +212,10 @@ Gemini's verdict on our EP3/EP4 (2026-11-17): Alex reads dramatic and calm lines
 lines sound like the narrator. So tag every line with its emotion in `tts_script.txt` (`[excited]`, `[deadpan]`,
 `[whispers]`, `[shouting]`, `[sad]`) and make the first line the most energetic of the video. Do not change the voice or
 its settings for this; distinct side-character voices are a proposal waiting for the person's yes.
+Narration targets (`references/DRIPDYL_STYLE_GUIDE.md` section 8): voice from frame 0 (today `post.py` adds a 0.1 s
+`adelay`), speech gaps ~0.08 s, at most 4-8 meme pauses of 0.20-0.28 s (today 17 x 0.45 s), 3.8-4.2 words/s, one
+ElevenLabs request per beat with a tag on every line. `tts.py` still sends one request per script: chunking is a pending
+kit change, so until it lands, put the per-line tags in `tts_script.txt` and judge the take at the voice gate.
 
 ```bash
 E=~/RobloxStories_tmp/<slug>; mkdir -p $E/audio $E/sfx $E/out $E/frames $E/frames_lo
@@ -267,6 +271,14 @@ The grammar that makes it look clean (each rule fixed a mistake the channel owne
 - **Acting:** `belly_laugh`/`crowd_laugh(target=...)` keep heads on the target (laughing kids "dancing" or looking away
   was a real complaint); `kneel_down` instead of a pose snap; heads down means head down, not turned away.
 - **Readable props and screens:** phone/app/game screens are real UI images straight-on and big, never a number on a slab.
+- **Camera and motion follow `references/DRIPDYL_STYLE_GUIDE.md`** (per-beat camera recipes with real `cams.py`
+  calls, framing, focus, blur, motion density, pre-render pass/fail checklist; Gemini-written, checked against the code).
+  EP4 root causes: 31 of 34 cameras were `frame_on` with no yaw (straight-on, pitch 4, 35 mm, 6 % push, f/2.8 focused
+  between characters), 52 `mo.idle()` vs 1 `mo.strike()`, shutter 0.5 on every shot including frame 0. Until the kit
+  defaults change: pass only the active character(s) to `frame_on` with `yaw=+/-22` (alternate), `pitch=-4`, `lens=45`,
+  `push=0.15`, `fstop=5.6` for two characters; call `look.motion_blur(0.0)` except on whips, crash zooms, throws and runs;
+  key a `strike()`/turn/gesture every 0.5-0.7 s; idle-only shots at most 15 % and never two in a row; use the beat
+  recipes (crash_zoom, whip_pan, dutch, impact_shake, run_follow, hero_low) the kit already has.
 - **Smooth like the winners (apply and judge on the contact sheet):** no linear keys - ease in-out for moves, overshoot
   ease-out for pops and reactions, ease-in for falls; 2-3 frames of anticipation before jumps, throws, kneels and pick-ups;
   snap into an impact or shock pose in 3-6 frames and hold 8-12 frames with tiny drift; 5-10 deg torso/shoulder counter-
@@ -402,5 +414,6 @@ own story, visual hook, sets and cast.
 | `references/LESSONS.md` | before any work: every mistake already paid for |
 | `references/GROWTH_LOOP.md`, `CHANNEL_LOG.md`, `COMPETITORS.md`, `EXPERIMENTS.md` | growth loop, "check my reach", monetization |
 | `RESEARCH_2026-11-17_dripdyl_gemini.md`, `RESEARCH_2026-11-17_gap_vs_dripdyl.md`, `RESEARCH_2026-11-17_viral_roblox_shorts.md` | viral research, gaps, Big Game format |
+| `references/DRIPDYL_STYLE_GUIDE.md` | every shots.py, tts_script.txt and audio config (camera, motion, narration) |
 | `examples/EP2_*`, `examples/EP3_*` | scripts, cue files, shots, QA report of finished episodes |
 | `kit/SKILL.md` (installed as `~/RobloxStories/SKILL.md`) | the kit's API in depth |
