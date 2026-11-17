@@ -50,8 +50,8 @@ Read this before writing any `shots.py`, `tts_script.txt` or audio config for a 
 
 Never the same recipe twice in a row (cams.py rule, still valid). **[Gemini]** values; tune on the low-res contact sheet.
 
-**`frame_on` while its defaults are unchanged:** always pass `yaw=+/-22` (alternate across cuts), `pitch=-4`, `lens=45`,
-`push=0.15`, `fstop=5.6` for two characters, and pass only the active character(s) in `chars`.
+**`frame_on` in kit v5** already defaults to yaw +/-22 (alternating), pitch -4, 45 mm, 15 % push from frame 1, f/2.8 solo
+or 5.6 two-shot and focus on `chars[0]`'s head. Pass only the active character(s) in `chars`, the speaker first.
 
 ---
 
@@ -96,9 +96,9 @@ Never the same recipe twice in a row (cams.py rule, still valid). **[Gemini]** v
 
 ## 8. Narration (ElevenLabs eleven_v3, voice Alex unchanged)
 
-- **One request per beat** (1-3 sentences, 15-40 words), not the whole script. Stitch the chunks and their alignments
-  into one `raw.mp3` + `words.json`. **[Gemini]** Check the ElevenLabs docs before relying on `previous_text`/`next_text`
-  with eleven_v3 (not verified); without them, keep chunks at sentence boundaries and compare a test take by ear.
+- **One request per line** of `tts_script.txt` (kit v5 `tts.py`; write one beat of 1-3 sentences per line). The chunks
+  and their alignments are stitched into `raw.wav` + `alignment_raw.json`. `previous_text`/`next_text` are not used (not
+  verified for eleven_v3); listen for joins between lines at the voice gate.
 - **A tag on every line** for its emotion, for example:
   1. `[excited, fast] In this town, every lie makes you SHRINK one inch.`
   2. `[deadpan] The mayor is the size of a pencil.`
