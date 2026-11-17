@@ -13,6 +13,8 @@ argv = _a[1:]
 ids = sorted(V.shots) if not argv or argv[0] == "all" else [int(x) for x in argv[0].split(",")]
 os.makedirs(os.path.join(vdir, "frames_lo"), exist_ok=True)
 log = open(os.path.join(vdir, os.environ.get("RBX_LO_LOG", "render_lo.log")), "a")  # v4.2: per-agent log
+if getattr(shotkit.rbx, "ASSETS_FALLBACK", False):     # v4.4 (EP4): Google Drive assets unreadable -> local copy
+    log.write("ASSETS FALLBACK: %s (%s)\n" % (shotkit.rbx.ASSETS, "PBR ok" if shotkit.rbx.ASSETS_FALLBACK == "pbr" else "NO PBR: lo-res QA only"))
 for p in V.check():
     log.write("TIMELINE: %s\n" % p)
 for i in ids:

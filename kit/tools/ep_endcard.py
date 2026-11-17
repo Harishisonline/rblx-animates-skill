@@ -42,14 +42,14 @@ def draw(img,t,W,D,icon,Wd=1080,Ht=1920):
     if row_fade>0:
         for kind,tt,x in (('heart',tL,0.22),('share',tS,0.42)):
             sc=pop(t-tt)
-            if sc>0:
+            if sc>0.05:  # v4.3: skip sub-pixel pop frames (EP4 crash)
                 s=int(190*sc); ic=icon(kind,s); 
                 if row_fade<1: ic.putalpha(ic.getchannel('A').point(lambda a:int(a*row_fade)))
                 img.alpha_composite(ic,(int(Wd*x)-s//2,y-s//2))
                 d.text((int(Wd*x),y+int(125*sc)),{'heart':'LIKE','share':'SHARE'}[kind],font=_font(D,40*sc),fill='#ffffff',stroke_width=5,stroke_fill='#000',anchor='mm')
         tB=tS+0.2
         sc=pop(t-tB)
-        if sc>0:
+        if sc>0.05:  # v4.3: skip sub-pixel pop frames (EP4 crash)
             t_click=tF+0.12; clicked=t>=t_click
             press=0.92 if t_click<=t<t_click+0.12 else 1.0
             bw,bh=int(330*sc*press),int(120*sc*press); cx=int(Wd*0.72)
@@ -66,13 +66,13 @@ def draw(img,t,W,D,icon,Wd=1080,Ht=1920):
                 if t_click<=t<t_click+0.25:
                     r=int(30+260*(t-t_click)); d.ellipse([mx-r,my-r,mx+r,my+r],outline=(255,255,255,int(220*(1-(t-t_click)/0.25))),width=6)
     sc=pop(t-tC)
-    if sc>0:
+    if sc>0.05:  # v4.3: skip sub-pixel pop frames (EP4 crash)
         s=int(220*sc); img.alpha_composite(icon('comment',s),(Wd//2-s//2,y-s//2))
         d.text((Wd//2,y+int(140*sc)),'COMMENT',font=_font(D,44*sc),fill='#ffffff',stroke_width=5,stroke_fill='#000',anchor='mm')
     E = ending(W)
     for k,(lab,wi,col) in enumerate(((E['opt_a_text'],E['opt_a'],'#2fd06b'),(E['opt_b_text'],E['opt_b'],'#ff3b30'))):
         sc=pop(t-W[wi]['start'])
-        if sc<=0: continue
+        if sc<=0.05: continue
         fs=56 if len(lab)<=7 else max(36,int(56*7/len(lab)))   # any option word fits its button (v4.2)
         bw=int(max(330,d.textlength(lab,font=_font(D,fs))+70)*sc); bh=int(110*sc); cx=int(Wd*(0.30+0.40*k)); cy=int(Ht*0.80)
         d.rounded_rectangle([cx-bw//2,cy-bh//2,cx+bw//2,cy+bh//2],radius=int(30*sc),fill=col,outline='#000',width=6)

@@ -39,7 +39,7 @@ def draw_caption(img,words,scale=1.0):
         d.text((x,y),w,font=FONT,fill=c,stroke_width=9,stroke_fill='#000000',anchor='lm'); x+=ww+sp
 # ---- icons (our own flat shapes)
 def icon(kind,size):
-    s=size; im=Image.new('RGBA',(s,s),(0,0,0,0)); d=ImageDraw.Draw(im)
+    s=max(8,int(size)); im=Image.new('RGBA',(s,s),(0,0,0,0)); d=ImageDraw.Draw(im)
     d.ellipse([0,0,s-1,s-1],fill=(20,20,24,210))
     c=s/2
     if kind=='heart':

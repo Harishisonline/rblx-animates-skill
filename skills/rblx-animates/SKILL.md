@@ -7,7 +7,8 @@ description: Make original Roblox-style 3D story reels (9:16, 90-120 s) exactly 
 
 This skill reproduces the production line behind the Instagram channel @rblxanimates: original, blocky Roblox-style 3D story
 reels, 9:16, 90-120 seconds, narrated by one upbeat voice, with meme sound effects, burned-in captions and an end card that
-asks viewers to like, share, follow and comment. The quality bar is the two finished episodes in `examples/`:
+asks viewers to like, share, follow and comment, and a growth loop that measures the channel, compares it side by side
+with Shorts that are winning right now (benchmark: @DripDyl) and updates this skill from what works. The quality bar is the two finished episodes in `examples/`:
 EP2 "The Poor Boy Who Bought the School" and EP3 "I Told ONE Secret. By Lunch, Everyone Knew."
 
 The work is long (about 5 hours, 2.5 of them unattended rendering) and the person cares about each stage, so the line has
@@ -16,7 +17,7 @@ The work is long (about 5 hours, 2.5 of them unattended rendering) and the perso
 | # | Stage | Gate (stop and wait for the person) |
 |---|---|---|
 | 0 | Setup check | - |
-| 1 | Research (when asked, or when topics run dry) | - |
+| 1 | Viral research (when asked, when topics run dry, or when the growth loop finds a weak stage) | - |
 | 2 | Topic + script | **Script + title approved** (white card) |
 | 3 | Music question | **Music answer** (their track or the default) |
 | 4 | Voice take | **Voice OK** (they listen) |
@@ -50,7 +51,7 @@ call ends; a 2-hour render must not depend on your shell staying open. Poll logs
 
 ---
 
-## 1. The two formats - never mix them
+## 1. The formats - never mix them
 
 Read the reference for the format you are making before writing a single line.
 
@@ -62,23 +63,74 @@ Read the reference for the format you are making before writing a single line.
 ("In this town, every lie shows on your wrist"), short dense sentences, time-marked escalation, twist ending. Its own bed and
 rules. Never put Blox City names or branding into it.
 
-Both formats share the narrator, the ending rule (`references/ENDING_RULE.md`), the look and the kit.
+**Current priority (owner, 2026-11-17): new viral "In this town / In this world" videos built to the section 2 and
+section 3 rules. Do not remake or re-render old episodes.**
+
+**Big Game (dripdyl style)** (section 2 rules, `RESEARCH_2026-11-17_dripdyl_gemini.md`): the owner's benchmark format. Cold open "I [tiny action] and [huge
+overreaction]" ("I stepped off a couch and 50 firefighters blasted me with fire hoses."), then "Welcome to the world's
+biggest game of [playground game]", "The rules were simple." (3 strikes, last one standing wins $1,000,000), a roster of
+absurd rivals (one hasn't moved since 2019, a grandma, a 5x champion), traps and eliminations each with a deadpan tag
+("He went down." / "Worth it."), the narrator wins by **noticing a small detail**, a host fake-out, and a 3-8-word home
+callback gag ("I've been up here for 3 days."). dripdyl runs 130-165 s at 3.7-4.2 words/s; our runtime stays 90-120 s unless the person approves longer. Original games and gags only.
+
+All formats share the narrator, the ending rule (`references/ENDING_RULE.md`), the look and the kit.
 
 ---
 
-## 2. Research (when asked "what's trending", or before a new batch of topics)
+## 2. Viral research (when asked "what's trending", when the growth loop finds a weak stage, or before a new batch)
 
-Goal: rules you can apply, not a mood board. For each reference reel or Short record hook (first 3 s), structure with
-timings, narration style, music, camera, look, facial acting and runtime. Method that works (details and past findings in
-`references/MUSIC_PLAYBOOK.md`, `references/REF_IG_*.md`, `references/GEMINI_AUDIO_NOTES.md`):
+Goal: learn the mechanism of videos that are winning **right now**, as rules you can apply. Copy the mechanism, never the
+script, title or characters. The proven method (2026-11-17, 16 videos, `RESEARCH_2026-11-17_dripdyl_gemini.md`):
 
-- YouTube search sorted by views + the Shorts shelf for the niche ("roblox story", "poor boy roblox", "in this town").
-- The music track comes from YouTube's own **Content-ID music card** in the page data, an on-screen credit, or the person's
-  Shazam - nothing else. Gemini returned "unknown" on two control tracks, so it cannot identify music.
-- Gemini in the browser can watch YouTube links and describe pacing, voice and mix. It cannot open Instagram links, and
-  local file upload is blocked for automation, so the person uploads files or clicks consent dialogs for you.
-- Never invent a view count, track name or BPM. Mark anything unverified as unverified. Append findings to the reference
-  files with video ID, views, date and evidence, so the next session builds on them.
+1. **Find candidates.** The person's links first. Then the benchmark roster (`references/COMPETITORS.md`): @DripDyl
+   (benchmark the owner wants to match), @butterbloxe, @GreenBroRants, @Gneef, @RyoRants, @Xenost-j3i, @itsRedBear, @PurpleHat. Then
+   YouTube search by upload date and by views ("roblox story", "in this world", "in this town", "roblox animation story")
+   and the Shorts shelf. Prefer **outliers**: a Short with views >= 10x the channel's subscribers, or >= 5x its median.
+   Ask Gemini (same task chat, step 3) for 10 more from the last 30 days with exact `/watch?v=` links; it finds them, you
+   measure them. On 2026-11-17 all 10 of its links were real but only 1 was a winner (8.5M); the rest had 6k-370k views,
+   so filter by measured views and outlier score before learning from anything.
+2. **Measure with yt-dlp (numbers only come from here):** `yt-dlp --skip-download -J https://www.youtube.com/watch?v=ID`
+   for views, likes, comments, duration, upload date, channel subscribers; `--write-auto-subs --sub-langs "en.*" --sub-format
+   json3` for the words. From the captions compute words per second, the first sentence, when the crisis starts, the ending
+   line. Use `/watch?v=ID` links, never `/shorts/` (it auto-advances). No media is downloaded.
+3. **Watch with Gemini, Task mode, one chat.** Signed-in pro account at `https://gemini.google.com/u/1/app` (the person's
+   default for research; check the avatar says the pro account and the picker says **Hydrogen**). Click **Task** (not Chat:
+   Chat mode often answers "I can't watch YouTube" and refuses several videos at once). Keep the whole research run in **one
+   task chat**; follow-ups go into that chat, never new chats. Write "Watch each of these Shorts one by one with the YouTube
+   tool" and give all links as `/watch?v=` URLs. Ask per video for: what is on screen in the first 3 s and the first sentence;
+   structure with timestamps; narrator voice (gender, age, accent, pitch, energy, pauses, punchline delivery, side-character
+   voices); shot length, camera, why the motion looks clean; faces and overlays; caption style/position; music moods and SFX;
+   the ending; why it went viral. End the same task with a voice-direction brief and an animation checklist. Read the answer
+   with JS (`[...document.querySelectorAll('model-response')].at(-1).innerText`), wait 30-60 s per video.
+4. **Trust levels.** Gemini is good at describing visuals, structure and delivery. It is wrong on numbers (it said 165 words
+   where the transcript had 276, and 175-190 wpm where dripdyl measures 220-250) and cannot name music. Numbers: yt-dlp.
+   Music: Content-ID card, on-screen credit or the person's Shazam. Mark everything else "Gemini, unverified".
+5. **Record** per video in a dated `RESEARCH_<date>_*.md` (Project + repo `references/`): ID, channel, subs, views, likes,
+   comments, runtime, date, outlier score, words/s, first sentence, beat map with times, ending, voice notes, animation notes,
+   lesson. Then turn findings into rules (section 11 step 3) - a finding is not a rule until it is observed in 3+ channels.
+
+### What the winners do (observed in 16 Shorts + 10 measured finds, 2026-11-17; re-check monthly)
+
+- **Sentence 1 is the whole premise**, and frame 1 **shows it working** (the boy visibly shrinks; numbers float over heads;
+  50 firefighters blast him). No title card, no greeting.
+- **Rule + cost/condition in sentence 2** ("...but if they get the ick, it's gone"; "the only way to grow back is a truth
+  that's hard to say"), then **3-4 absurd world examples with numbers and authority figures** (mayor the size of a pencil,
+  grandma 500 pull-ups), then **"And me?"**: the narrator's handicap or the opposite of everyone.
+- **"Until one night..." / "On Friday..."** brings a family or crush stake (sister in a fire, mom's last word).
+- **The weakness is the only solution / the villain trips his own rule** (the 4-inch kid is the only one light enough; the
+  narrator yells "RON! YOUR MOM IS HERE!"; the liar mayor is forced to answer yes/no live).
+- **Numbered escalation** ("Night 1... Night 5", "Strike one... Strike three", an on-screen clock) gives the rhythm.
+- **The rule solves the crisis in reverse** (lie on purpose to shrink into the vent; the useless toast power floats the bus).
+- **Visible counters/progress bars** (BRAD'S CRUSHES: 212 -> 0, word counts, 0 -> 8,000,000,000) act as a clock.
+- **Pace 3.8-4.9 words per second** (dripdyl 3.7-4.2, In-this-world hits 4.1-4.9). Near-zero dead air.
+- **Cuts every 0.5-2.5 s**, camera never still, 2D face swaps on the beat, anime overlays (sweat drops, "!", hearts, comic
+  starbursts), 1-3-word yellow/white captions with a heavy black stroke.
+- **Music changes mood with the story** (playful -> tense -> warm/triumphant) and drops to silence for a wait; SFX on
+  nearly every cut.
+- **Endings:** a callback gag (dripdyl: "I've been up here for 3 days"), an emotional truth line, a rule-reversal twist, or a
+  cliffhanger question that sets up Part 2. Most have no like/share CTA; one used an open comment prompt.
+- **Runtimes split in two:** In-this-world rule stories 37-57 s, and storyline/game stories 135-180 s. Titles: 2-6 words +
+  emoji, or the full premise.
 
 ---
 
@@ -99,8 +151,28 @@ Then write the script. The model for structure and density is `examples/EP3_frie
   Plan 15-20 per episode. They are never spoken.
 - **Reversal + callback:** the wronged kid wins by character, not revenge, and the last story line returns to the opening
   object ("The hole still fits a pencil." / "half my class ordered duck night-lights").
-- **Ending (every video, both formats):** "Like, share and follow for more." then a one-word, two-option comment question:
+- **First 3 seconds decide "stayed to watch" (check before approval, every format):** frame 0 is motion or the weirdest
+  picture of the video (open on the climax image or the rule happening), never a static phone screen, a text wall or a
+  character standing; sentence 1 is a world rule or an absurd consequence ("I did X and Y happened"), never backstory -
+  the twist word lands by 2.5 s; a sharp SFX inside 0.5 s; voice starts at full energy with no silence; only one thing to
+  read (1-2-word captions, no UI paragraph); 2-3 cuts or one big camera move before 3 s; the stakes read on mute.
+  Our EP3/EP4 openings failed this (backstory sentence, twist word at ~4 s, static phone UI for 2 s; Gemini comparison
+  2026-11-17). Write the 0-3 s plan (frame, words, SFX, cuts) on the white card next to the title.
+- **Viral rules (In this world / Big Game):** apply "What the winners do" in section 2: premise in sentence 1 shown in
+  frame 1, rule + cost in sentence 2, 3-4 absurd world examples, "And me?", "Until one night", the rule used in reverse,
+  an on-screen counter where the premise has a number, deadpan one-line tags after absurd beats. Build the story around
+  one visual rule or twist; earnest moral arcs alone read as predictable (Gemini scored our premise 5.5 vs 9.5).
+- **Pace and dead air:** measured 2026-11-17: EP3 3.3 and EP4 3.45 words/s overall with 17-18 meme pauses (~8 s of
+  silence); dripdyl 3.7-4.2, In-this-world hits 4.1-4.9 with almost no dead air. Keep at most 6-8 meme pauses, cut every
+  other silence over 0.15 s except a deliberate 0.25 s beat before a punchline, and test a faster take at the voice gate
+  (the person decides by ear). Count words and measure the take; never assume.
+- **Title (2026-11-17 gap):** 2-6 words, Title Case, at most 1 emoji, no "PART 2", no hashtags in the title (they go in
+  the description). Ours ran to 98 characters in caps and got cut off in the feed.
+- **Ending (every video, every format):** "Like, share and follow for more." then a one-word, two-option comment question:
   "Would you give Max a second chance? Comment TRUST or BLOCK." One-tap answers get comments; themed phrases got zero.
+  The winners end on a callback gag, an emotional truth line or a cliffhanger, with no CTA; ours spends the last 5.2-5.8 s
+  on the CTA, which Gemini ranks as our costliest gap. Until the person decides, put the story's last line right before
+  "Like, share..." and keep the CTA as short as possible.
 - **TTS spelling:** the voice model mangles "Blox". Write "Blocks City" / "Blocks Tea" in `tts_script.txt` only; captions and
   the script keep "Blox".
 
@@ -130,6 +202,16 @@ Kevin MacLeod tracks were rejected by the channel owner (not the sound viral cre
 Narrator: ElevenLabs voice **Alex** `yl2ZDV1MzN4HbQJbMihG`, model `eleven_v3`, stability 0.0, similarity 0.75, style 0.25,
 speaker boost (kit preset `alex_ep1`, `references/VOICE_SPEC.md`). Never change the voice because of measurements; only after
 playing a clip to the person and getting a yes. Never clone a voice from someone else's video.
+
+**Delivery direction (dripdyl-style, from the Gemini study; tags for eleven_v3, test at the voice gate):** a sharp friend
+telling an unbelievable story - expressive in the setup, flat and matter-of-fact on absurd lines. Lift key nouns and numbers
+("FIFTY firefighters"); setups rise, payoffs drop flat; a short breath (comma) before a number or twist; a full stop and a
+beat before a deadpan punchline, then move on fast; deadpan = lower and flatter, "like a boring weather report", no
+laugh. Rules and stakes slightly slower, action fast. For emotional storylines (butterbloxe), same clarity, ~15% warmer.
+Gemini's verdict on our EP3/EP4 (2026-11-17): Alex reads dramatic and calm lines "at the same flat energy", and quoted
+lines sound like the narrator. So tag every line with its emotion in `tts_script.txt` (`[excited]`, `[deadpan]`,
+`[whispers]`, `[shouting]`, `[sad]`) and make the first line the most energetic of the video. Do not change the voice or
+its settings for this; distinct side-character voices are a proposal waiting for the person's yes.
 
 ```bash
 E=~/RobloxStories_tmp/<slug>; mkdir -p $E/audio $E/sfx $E/out $E/frames $E/frames_lo
@@ -185,6 +267,22 @@ The grammar that makes it look clean (each rule fixed a mistake the channel owne
 - **Acting:** `belly_laugh`/`crowd_laugh(target=...)` keep heads on the target (laughing kids "dancing" or looking away
   was a real complaint); `kneel_down` instead of a pose snap; heads down means head down, not turned away.
 - **Readable props and screens:** phone/app/game screens are real UI images straight-on and big, never a number on a slab.
+- **Smooth like the winners (apply and judge on the contact sheet):** no linear keys - ease in-out for moves, overshoot
+  ease-out for pops and reactions, ease-in for falls; 2-3 frames of anticipation before jumps, throws, kneels and pick-ups;
+  snap into an impact or shock pose in 3-6 frames and hold 8-12 frames with tiny drift; 5-10 deg torso/shoulder counter-
+  rotation and head tilt on every pose (Gemini: our upper bodies stay "squared off"); 3/4 low or high angles for reactions
+  instead of flat eye-level mediums; the camera always alive (5-8 % eased push-in on every static shot, whip pans or
+  match-cut zooms between places); face swaps stepped, 1-2 frames **before** the sound, shock/anger/laugh mouths 20-30 %
+  bigger, each big face swap with a head tilt or shoulder pop; motion blur only on fast flights, projectiles and whips,
+  never on holds or frame 0; cuts every 0.5-2.5 s (ours already average ~1.4 s: 69 shots in 96 s). Overlays that carry
+  the premise: floating counters, comic starbursts ("STRIKE THREE!"), phone pop-ups, sweat drops, "!" and hearts. Keep
+  in-world UI in the top 60 % so captions never collide with it. 60 fps is a test (render cost doubles), not a default.
+  Indoor and night scenes: test +10-15 % exposure at look-dev so characters pop on a phone (Gemini); the person decides.
+- **Prop contact:** Gemini saw props hovering in front of flat hands (EP4 books, keyboard, paycheck; EP3 handshake, phone,
+  money bag). Use `hold()` for every held prop and treat any NOTOUCH/PROPFLOAT flag as a blocker, then check those exact
+  beats on the 2 fps contact sheet.
+- **SFX on the picture:** a whoosh or pop on every cut and face swap and a hit on every impact, mixed under the voice;
+  the bed should rise, drop out or change with the story's turns (Gemini: our bed "stays at one flat energy").
 - **Look:** `look.STYLE="clean"`, `cast.CLEAN=True` (crisp, matte, neutral, not blue), night like reference
   `references/REF_IG_Dfe8B5Hs3G6.md`, day like `references/REF_IG_Dfs43n3oWqx.md`. Never judge the look from low-res frames.
 
@@ -242,6 +340,54 @@ while rendering (people ask "is it stuck?": answer with frame counts and the las
 
 ---
 
+## 11. Growth loop: measure -> find what wins -> learn -> update this skill -> ship
+
+Run it when the person asks how the channel is doing, to check reach, what others do better, to grow or monetize, "run the
+growth loop", every Monday, and 48 h after each post. Full instructions: `references/GROWTH_LOOP.md` (Project instructions).
+The goal is a monetized channel, so every step ends in a decision that moves a monetization number.
+
+1. **Measure our reach (never invent a number).** Windsor.ai connector (`get_connectors` -> Instagram `17841479901972435`,
+   YouTube `91882`; `get_fields` before `get_data`), YouTube Studio / Instagram Insights screenshots the person gives, and
+   `yt-dlp -J` on our own Shorts. Per video: views 48 h and 7 d, reach, average watch time and % watched, 3-s skip or
+   swiped-away, likes, comments, shares/sends, saves, follows. Append to `CHANNEL_LOG.md`. Re-verify the YPP and Instagram
+   thresholds on the official help pages each cycle and report "X / target (%)" and the 90-day pace.
+   **"Stayed to watch"** (Shorts feed: viewed vs swiped away) is the number that gets a Short recommended; Shorts have no
+   thumbnail click-through in the feed. Windsor does not expose it: ask for the YouTube Studio Shorts screenshot, and use
+   `engaged_views / views` as a proxy (2026-11-17: 54-72 %) plus Instagram `media_reel_skip_rate` (18-39 %).
+2. **Is it good?** Compare each funnel stage with our median and the peers. Baseline 2026-11-17: IG skip 18-39 %, 33-42 %
+   watched, ~0 shares and 0-1 comments per video, IG reach 1.1-1.4k, YT 28-1,426 views; peers in this niche reach 2-25M with
+   tens of thousands of likes. Name the **one weakest stage** (stop, hold, share, talk, convert, volume). If any stage is
+   below the peer level, go to steps 3-4 aimed at that stage (weak stop -> study first 3 s; weak hold -> beat maps and pace;
+   no shares -> endings and emotional payoffs).
+3. **Compare ourselves with the benchmark, side by side.** In the same Gemini task chat, give our two latest public
+   Shorts and two benchmark Shorts as `/watch?v=` links and ask for: score /10 for each on first 3 s, premise, voice,
+   pace/dead air, animation smoothness, faces, camera, overlays/captions, music/SFX, ending, title, look; the biggest gap
+   with a timestamp from OUR video; the exact fix; the top 5 gaps ranked by views lost; and why viewers swipe in our
+   first 3 s. If the answer is only a summary, ask it to "write the full result here in the chat". Check every claim you
+   can by measurement (words/s and silences from `words.json`, cuts with ffmpeg scene detection, outro length, a 0-3 s
+   frame strip you look at) and mark the rest "Gemini". 2026-11-17 result: `RESEARCH_2026-11-17_gap_vs_dripdyl.md`.
+4. **Find and learn from videos that already win it:** section 2 (outliers, yt-dlp numbers, Gemini Task chat). Write each
+   finding as `rule | evidence (IDs + numbers) | level | test | decision rule`. Levels: proven (our own test won) > observed
+   (3+ independent channels) > hypothesis. Only proven and observed rules become skill defaults; hypotheses become
+   one-variable experiments in `EXPERIMENTS.md` (3 posts per arm, judged at 7 days, ~20 %+ gain on the primary metric with
+   no loss on the guardrail; one viral post is noise).
+5. **Update this skill with change control.** Show a white card per change: what changes | why (evidence + level) | how we
+   test it | how we roll back. The person's decisions (runtime, ending, Alex voice, music, gates) never change on data alone.
+   After a yes: edit the single source of truth (numbers in `FORMATS.json`, endings in `ENDING_RULE.md`, formats in their
+   files, research in a dated file), propose the `SKILL.md` edit with the skill-update card, append to `LESSONS.md`, bump
+   the kit version and `HANDOFF.md`.
+6. **Ship.** Weekly batch of 5-7 premises scored on premise family, stake + clock in sentence 1, visual hook in frame 1,
+   difference from our last 10 videos, cost; at least one follow-up to our best performer and one live experiment. Each goes
+   through the normal gates. Package: 3 titles, a first frame that stops a scroll on mute, the same file to Shorts and Reels,
+   the audience question answered truthfully. Log posts and schedule the 48 h check.
+
+**Never:** invent or round up numbers; buy views or engagement; copy another creator's video, script, character or title;
+use ripped music; mislabel made-for-kids; post without an explicit yes for that exact file; promise virality or a date.
+Uniqueness matters for monetization: YouTube does not monetize near-identical template videos, so every video needs its
+own story, visual hook, sets and cast.
+
+---
+
 ## Reference map
 
 | File | Read when |
@@ -254,5 +400,7 @@ while rendering (people ask "is it stuck?": answer with frame counts and the las
 | `references/CLEAN_ANIMATION.md`, `ACTING.md`, `LOOK.md`, `REF_IG_*.md` | shots, acting, look |
 | `references/DAILY_PIPELINE.md`, `TEAM_AGENTS.md` | the day plan, parallel agents |
 | `references/LESSONS.md` | before any work: every mistake already paid for |
+| `references/GROWTH_LOOP.md`, `CHANNEL_LOG.md`, `COMPETITORS.md`, `EXPERIMENTS.md` | growth loop, "check my reach", monetization |
+| `RESEARCH_2026-11-17_dripdyl_gemini.md`, `RESEARCH_2026-11-17_gap_vs_dripdyl.md`, `RESEARCH_2026-11-17_viral_roblox_shorts.md` | viral research, gaps, Big Game format |
 | `examples/EP2_*`, `examples/EP3_*` | scripts, cue files, shots, QA report of finished episodes |
 | `kit/SKILL.md` (installed as `~/RobloxStories/SKILL.md`) | the kit's API in depth |

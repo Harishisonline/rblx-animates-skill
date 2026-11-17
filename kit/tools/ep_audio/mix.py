@@ -1,7 +1,7 @@
 # kit v4.2: per-episode mix. Config: $EP/audio/mix_cfg.json
 #  files: {LABEL: [[path, ffmpeg_filter, offset_s], ...]}  tokens: {K}=kit sfx dir, {S}=$EP/sfx/, {A}=$EP/audio/, {RB}=kit root
 #  gain: {LABEL: g}   extra: [[path, word_index or "t:<sec>", gain]]
-#  bed: {"file":..., "from_word":0, "to_word":-1, "under_db":7, "duck_db":3.5, "fade_out":2.0}  (v4.3: mix_final.wav = the one posted mix, with the bed; mix_nomusic.wav kept for re-mixing)
+#  bed: {"file":..., "from_word":0, "to_word":-1, "under_db":7, "duck_db":3.5, "fade_out":2.0}  (preview only; nomusic = post file)
 # Ending pops/click are found from the words (Like / share / follow / Comment + the two options). EP2's version: mix_ep2.py.
 import os, json, subprocess, re, numpy as np
 D = os.environ['EP'].rstrip('/') + '/'; A = D + 'audio/'
@@ -60,12 +60,10 @@ if bc:
         if lab.startswith(('ICON', 'MOUSE', 'extra')): continue
         a = int(t * SR); duck[a:a + int(1.2 * SR)] = np.minimum(duck[a:a + int(1.2 * SR)], 10 ** (-8 / 20))
     duck = np.convolve(duck, np.ones(2400) / 2400, 'same')
-    master(v + sfx + b * duck, 'final')
-if not bc:
-    import shutil; shutil.copy(A + 'mix_nomusic.wav', A + 'mix_final.wav')  # v4.3: no bed -> final = voice + SFX
+    master(v + sfx + b * duck, 'preview')
 json.dump(cues, open(A + 'sfx_cues_placed.json', 'w'), indent=0)
 print('dur', round(dur, 2), 'cues', len(cues), 'ending words', iL, iS, iF, iC, opts, [W[i]['word'] for i in opts])
-for f in ('mix_nomusic.wav', 'mix_final.wav'):
+for f in ('mix_nomusic.wav', 'mix_preview.wav'):
     if not os.path.exists(A + f): continue
     o = subprocess.run(['ffmpeg', '-i', A + f, '-af', 'ebur128=peak=true', '-f', 'null', '-'], capture_output=True, text=True).stderr
     print(f, [l.strip() for l in o.splitlines() if l.strip().startswith(('I:', 'Peak:'))][-2:])

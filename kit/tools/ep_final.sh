@@ -7,7 +7,8 @@ L=~/RobloxStories_tmp/blender.lock
 until mkdir $L 2>/dev/null; do sleep 20; done
 N=$(cat $EP/shots.py $EP/shots_[a-z].py 2>/dev/null | grep -c "^@S(")  # v4.2: counts split shot parts too
 echo "start $(date) shots=$N samples=$SAMPLES" >> $LOG
-for s in ${@:-$(seq 1 $N)}; do
+IDS=$(cat $EP/shots.py $EP/shots_[a-z].py 2>/dev/null | grep -oE "^@S\( *[0-9]+" | grep -oE "[0-9]+" | sort -n | uniq | tr "\n" " ")  # v4.3: real @S ids (EP4 ids 1-42,50-76)
+for s in ${@:-$=IDS}; do
   for try in 1 2; do
     free=$(df -g ~ | tail -1 | awk '{print $4}')
     if [ "$free" -lt 8 ]; then echo "LOW DISK ${free}G stop $(date)" >> $LOG; rmdir $L; exit 3; fi
