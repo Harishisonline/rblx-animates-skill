@@ -6,8 +6,8 @@ description: "Make original Roblox-style 3D story reels the RBLX ANIMATES way (I
 # RBLX ANIMATES: Roblox story video studio
 
 This skill reproduces the production line behind the Instagram channel @rblxanimates: original, blocky Roblox-style 3D story
-reels, 9:16 (In-this-town: long 80-120 s and short 35-60 s; Blox City storylines 90-120 s), narrated by one fast, upbeat
-voice, with meme sound effects, burned-in captions, a like/share/follow end card on Blox City episodes only, and a growth loop that measures the channel, compares it side by side
+reels, 9:16 (In-this-town Shorts 80-120 s; Blox City storylines 90-120 s; plus ~20-minute compilations of uploaded videos),
+narrated by one fast, upbeat voice, with meme sound effects, burned-in captions, a like/share/follow end card on Blox City episodes only, and a growth loop that measures the channel, compares it side by side
 with Shorts that are winning right now (benchmark: @DripDyl) and updates this skill from what works. The quality bar is the two finished episodes in `examples/`:
 EP2 "The Poor Boy Who Bought the School" and EP3 "I Told ONE Secret. By Lunch, Everyone Knew."
 
@@ -71,7 +71,7 @@ overreaction]" ("I stepped off a couch and 50 firefighters blasted me with fire 
 biggest game of [playground game]", "The rules were simple." (3 strikes, last one standing wins $1,000,000), a roster of
 absurd rivals (one hasn't moved since 2019, a grandma, a 5x champion), traps and eliminations each with a deadpan tag
 ("He went down." / "Worth it."), the narrator wins by **noticing a small detail**, a host fake-out, and a 3-8-word home
-callback gag ("I've been up here for 3 days."). dripdyl runs 130-165 s at 3.7-4.2 words/s; ours use the long tier (80-120 s). Original games and gags only.
+callback gag ("I've been up here for 3 days."). dripdyl runs 130-165 s at 3.7-4.2 words/s; our Shorts are 80-120 s. Original games and gags only.
 
 All formats share the narrator, the ending rule (`references/ENDING_RULE.md`), the look and the kit.
 
@@ -140,10 +140,11 @@ If the person did not name a topic, propose 3 one-line premises tied to the rese
 Then write the script. The model for structure and density is `examples/EP3_friend_secret/SCRIPT_AND_PLAN.md`
 (and EP2's). What makes these work:
 
-- **Length by format and tier (owner 2026-11-18; numbers in `FORMATS.json`):** In-this-town **long** 80-120 s
-  (310-450 words, 2 a week) and **short** 35-60 s (140-230 words, as many as possible); Blox City 90-120 s (300-370
-  words). Kit v5.1 delivers ~3.8-4.2 words/s for In-this-town (TEMPO 1.12, 0.24 s meme pauses). Write `story.json` with
-  `"format"` (`in_this_town` / `blox_city`), `"tier"` (`long` / `short`) and `"hook_word"` (the twist word that must land
+- **Length by format and tier (owner 2026-11-18; numbers in `FORMATS.json`):** every In-this-town video is a **Short**
+  of 80-120 s (310-450 words, as many a week as possible); Blox City 90-120 s (300-370 words). **Long videos** are ~20-minute
+  compilations of videos already on the channel (2 a week, no new animation; YouTube long-form, whose watch hours count
+  toward YPP separately from Shorts views). Kit v5.1 delivers ~3.8-4.2 words/s for In-this-town (TEMPO 1.12, 0.24 s meme pauses). Write `story.json` with
+  `"format"` (`in_this_town` / `blox_city`), `"tier"` (`short`; `long` = compilation) and `"hook_word"` (the twist word that must land
   by 2.5 s); the kit reads them. Count words with a script, don't guess; if over the tier, cut pauses first, then a line.
 - **Hook = the whole promise in one breath:** "I told my best friend one secret. By lunch, the whole school knew. And he
   got paid for it." The viewer decides in two seconds.
@@ -158,8 +159,8 @@ Then write the script. The model for structure and density is `examples/EP3_frie
 - **What to make: `references/VIRAL_PLAYBOOK.md`.** Premises from the 7 families scored 1-5 on mute test, 3x
   escalation, buildable with the kit, reverse-rule climax and shareability; propose only premises at >= 20/25 (show the
   score on the white card), with a personal stake + clock early and a visible counter when the rule has a number. Write
-  with its beat template (long tier: template B stretched to 80-120 s; short tier: template A 45-60 s or the 35-45 s
-  "lite" format - owner 2026-11-18), its first-sentence formulas and its ending formulas. Check COMPETITORS.md so a
+  with its beat template (template B, 80-120 s - owner 2026-11-18; the 45-60 s template A and 35-45 s "lite" format are
+  not used for now), its first-sentence formulas and its ending formulas. Check COMPETITORS.md so a
   premise is not a recent hit (copy mechanisms, never premises, titles or characters).
 - **First 3 seconds decide "stayed to watch" (check before approval, every format):** frame 0 is motion or the weirdest
   picture of the video (open on the climax image or the rule happening), never a static phone screen, a text wall or a
@@ -417,8 +418,8 @@ The goal is a monetized channel, so every step ends in a decision that moves a m
    After a yes: edit the single source of truth (numbers in `FORMATS.json`, endings in `ENDING_RULE.md`, formats in their
    files, research in a dated file), propose the `SKILL.md` edit with the skill-update card, append to `LESSONS.md`, bump
    the kit version and `HANDOFF.md`.
-6. **Ship** (`references/VIRAL_PLAYBOOK.md` sections 5-6; cadence decided 2026-11-18: 2 long + as many short videos as
-   possible a week).
+6. **Ship** (`references/VIRAL_PLAYBOOK.md` sections 5-6; cadence decided 2026-11-18: as many 80-120 s Shorts as possible
+   plus 2 compilations of ~20 minutes a week, built from finished `out/final.mp4` files only).
    Weekly batch of 5-7 premises scored on premise family, stake + clock in sentence 1, visual hook in frame 1,
    difference from our last 10 videos, cost; at least one follow-up to our best performer and one live experiment. Each goes
    through the normal gates. Package: 3 titles, a first frame that stops a scroll on mute, the same file to Shorts and Reels,

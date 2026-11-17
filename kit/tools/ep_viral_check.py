@@ -108,8 +108,8 @@ if W:
         rep('no like/share/follow outro (In this town)', not li, f'{out:.1f} s' if li else 'none', 'none')
     elif not fmt:
         rep('story.json format', False, 'missing', 'in_this_town / blox_city', warn=True)
-    tier = str(st.get('tier', 'long')).lower()
-    lo, hi = (80, 120) if tier == 'long' else (35, 60)
+    tier = str(st.get('tier', 'short')).lower()      # owner 2026-11-18: Shorts are 80-120 s; 'long' = ~20 min compilation
+    lo, hi = (80, 120) if tier == 'short' else (1080, 1500)
     rt = W[-1]['end'] + 0.6
     rep(f'runtime ({tier})', lo <= rt <= hi, f'{rt:.0f} s', f'{lo}-{hi} s')
 else:

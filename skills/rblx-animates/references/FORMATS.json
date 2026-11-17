@@ -1,5 +1,5 @@
 {
- "_doc": "ONE source of truth for per-format defaults (v3.7, 2026-11-14). Read by tools/format_preset.py, pacing.py, hype_lint.py, grade_check.py, qa_gate.py. Evidence tags: measured = numbers we measured on reference videos; inferred = our reading/convention; UNVERIFIED = not confirmed by a render or a listen. Sources: docs/research/{NARRATION_HYPE,MUSIC_RESEARCH,REF_IG_Dfe8B5Hs3G6,REF_IG_Dfs43n3oWqx,GEMINI_AUDIO_NOTES}.md. | v5.1 2026-11-18: in_this_world tiers/length/cta/tts/tempo updated from owner decisions.",
+ "_doc": "ONE source of truth for per-format defaults (v3.7, 2026-11-14). Read by tools/format_preset.py, pacing.py, hype_lint.py, grade_check.py, qa_gate.py. Evidence tags: measured = numbers we measured on reference videos; inferred = our reading/convention; UNVERIFIED = not confirmed by a render or a listen. Sources: docs/research/{NARRATION_HYPE,MUSIC_RESEARCH,REF_IG_Dfe8B5Hs3G6,REF_IG_Dfs43n3oWqx,GEMINI_AUDIO_NOTES}.md. | v5.1 2026-11-18: in_this_world tiers/length/cta/tts/tempo updated from owner decisions (tiers corrected: short 80-120 s, long = ~20 min compilation).",
  "default": "in_this_world",
  "aliases": {
   "in_this_town": "in_this_world",
@@ -50,7 +50,7 @@
     80,
     120
    ],
-   "length_note": "owner 2026-11-18: LONG videos 80-120 s (like dripdyl, 2 a week) + SHORT videos 35-60 s (many a week); story.json 'tier': 'long'|'short'",
+   "length_note": "owner 2026-11-18 (corrected): every In-this-town video is a SHORT of 80-120 s (posted as YouTube Short + IG Reel); LONG videos are ~20-minute compilations of the channel's uploaded videos (YouTube long-form).",
    "look": {
     "default": "ref_matte",
     "day_exterior": "ref_day",
@@ -179,7 +179,7 @@
    "faces": "hard decal swaps on beats; reaction ladder 6-8 f/step; eye darts every 4-5 f in fear holds; blinks 2.5-4 s; no narrator lip-sync (UNRENDERED)",
    "branding": "In-this-town videos must NOT use 'Blox Town'/'Blox City' branding. 'Blox City' is reserved for later storyline videos (the user will brief them).",
    "tiers": {
-    "long": {
+    "short": {
      "length_s": [
       80,
       120
@@ -188,21 +188,18 @@
       310,
       450
      ],
-     "per_week": 2
-    },
-    "short": {
-     "length_s": [
-      35,
-      60
-     ],
-     "words": [
-      140,
-      230
-     ],
      "per_week": "as many as possible"
+    },
+    "long": {
+     "length_s": [
+      1080,
+      1500
+     ],
+     "what": "compilation of already-uploaded videos, no new animation",
+     "per_week": 2
     }
    },
-   "cadence": "owner 2026-11-18: 2 long + many short per week"
+   "cadence": "owner 2026-11-18: many 80-120 s Shorts + 2 compilations (~20 min) a week"
   },
   "horror": {
    "what": "dread / creature / 'every night it came closer' story",
