@@ -19,7 +19,7 @@ The work is long (about 5 hours, 2.5 of them unattended rendering) and the perso
 | 1 | Viral research (when asked, when topics run dry, or when the growth loop finds a weak stage) | - |
 | 2 | Topic + script | **Script + title approved** (white card) |
 | 3 | Music question | **Music answer** (their track or the default) |
-| 4 | Voice take | - (owner 2026-11-20: narration v4 is the approved house sound, no more samples; the full take is made directly, must pass ears_check, and the owner hears it with the look-dev/final) |
+| 4 | Voice take | - (owner 2026-11-20: the house narration "v3" (`narrate_house.py`) is the approved sound, no more samples; the full take is made directly, must pass ears_check, and the owner hears it with the look-dev/final) |
 | 5 | Meme SFX + mix | - (they hear it with the voice gate or the final) |
 | 6 | Shots + low-res QA | - |
 | 7 | Look-dev stills | **Look OK** |
@@ -246,30 +246,31 @@ Kevin MacLeod tracks were rejected by the channel owner (not the sound viral cre
 
 ## 5. Voice
 
-**Narration v4 = THE house narration for every format (kit v6.1, owner 2026-11-20: "the hook v3 withbed is
-almost the exact output I am looking for ... this is how all our future voice outputs will be ... no need to make more
-samples"; reference `~/RobloxStories_tmp/yawn_curfew/voice_test/YawnCurfew_hook_v3_withbed.mp3`):**
+**House narration "v3" = THE voice for every video (kit v6.1, owner 2026-11-20 on the full Yawn Curfew take: "This is
+what I want ... this exact voice each and every time for all of my videos"; reference takes
+`~/RobloxStories_tmp/yawn_curfew/voice_test/YawnCurfew_hook_v3_withbed.mp3` and `YawnCurfew_FULL_v3_withbed.mp3`). The
+owner calls it "v3"; never rename it or change the method without a new yes.**
 - **Who speaks:** In-this-town = Adam `pNInz6obpgDQGcFmaJgB` + the D alien FX; **Blox City storylines = Alex**
-  `yl2ZDV1MzN4HbQJbMihG` with the same delivery and no FX. Character voices for quoted lines as below.
-- **Generate:** `EP=<ep> python3 tools/ep_audio/narrate_v4.py [--voice adam_d|alex]` (the preset follows `story.json`
-  format). It sends one eleven_v3 request per story section (stability 0.0 Creative, similarity 0.75, style 0.35, speaker
-  boost), adds `[speaking quickly]` after each section's emotion tag, then works PER SENTENCE from the alignment: trims
-  the edges, caps every silence inside a sentence at 0.12 s, stretches each sentence to a 4.75 w/s speech pace (factor
-  0.80-1.35; short lines get the same pace as long ones; sound words like "Ahh-hh." "Thunk!" keep their length), joins
-  sentences with 0.06 s and inserts at most 3 planned beats (`audio/beats.json` [{"after": <script word index>, "sec":
-  0.4}]). It writes `audio/voice.wav`, `voice.mp3`, `words.json` keyed to `script.txt` tokens (digits in the captions match
-  number words in the TTS file) and `narrate_report.json`. Cached per section. Then `python3 tools/ears_check.py
-  audio/voice.wav --script script.txt` must pass (targets recalibrated in v6.1 so the approved reference passes).
-- **Write `tts_script.txt` for it** (the delivery comes from the text): blank-line sections of 1-3 sentences, each section
-  starting with its emotion tag in an energy arc that RISES from the trigger to the climax ([mischievously], [curious],
-  [playful], [matter-of-fact], [serious] for the setup; [ominous], [tense], [urgent], [whispers], [excited],
-  [determined] for the build and climax; [deadpan] / [proud] for the wry ending); CAPS on the payoff word of key lines;
-  numbers and times as words ("forty-six", "two a.m."); the same words as `script.txt` otherwise; `[yawns]`, `[laughs]`,
-  `[sighs]` before written sound words. Example: `~/RobloxStories_tmp/yawn_curfew/tts_script.txt` (first full take:
-  109 s, 4.21 w/s, about 2,900 characters).
+  `yl2ZDV1MzN4HbQJbMihG`, the same method, no FX. Character voices for quoted lines as below (no narrator FX on them).
+- **Generate:** `EP=<ep> python3 tools/ep_audio/narrate_house.py [--voice adam_d|alex]` (preset from `story.json`
+  format). One eleven_v3 request per `tts_script.txt` paragraph (stability 0.0 Creative, similarity 0.75, style 0.35,
+  speaker boost), performed exactly as written - the tool adds no tags. Then per sentence from the alignment: trim, cap
+  inner silences at 0.12 s (ffmpeg silenceremove -42 dB), stretch to a 4.75 w/s speech pace (factor 0.80-1.35; short
+  lines the same pace as long ones; sentences starting with a sound word keep their length); 0.06 s joins; no extra beats
+  (audio/beats.json only if the owner asks, max 3); THEN the narrator FX on the whole take + HPF/EQ/comp + loudnorm -14
+  LUFS. Writes `audio/voice.wav`, `voice.mp3`, `words.json` (faster-whisper on the final take, matched to `script.txt`
+  tokens) and `narrate_report.json`. Cached per paragraph: re-runs are free and rebuild the identical take (proven: the
+  rebuild of the approved Yawn Curfew take differs by 0.0). Then `tools/ears_check.py audio/voice.wav --script
+  script.txt`. Do NOT use `narrate_v4.py` (superseded: it added [speaking quickly] to the yawn lines).
+- **Write `tts_script.txt` like `~/RobloxStories_tmp/yawn_curfew/tts_script.txt`:** one paragraph = 1-3 sentences =
+  one request: `[emotion] [speaking quickly] text`, EXCEPT paragraphs with a written sound word, `[yawns]`, `[laughs]`
+  or `[whispers]`, which get NO `[speaking quickly]`; emotion tags in an arc that RISES from the trigger to the climax
+  ([mischievously] [curious] [playful] [matter-of-fact] [serious] -> [ominous] [tense] [urgent] [whispers] [excited]
+  [determined] -> [proud] / [deadpan] for the ending); CAPS on the payoff word; numbers and times as words; otherwise
+  the same words as `script.txt`. A 100-120 s Short costs about 3,000 characters.
 - Never change a voice because of measurements; the owner decides by ear. Never clone a voice from someone else's video.
 
-**Narration v3 (kit v6.0, superseded 2026-11-20 by v4 for generation; its measurements and rules still apply):**
+**Narration v3-route tools of kit v6.0 (`narrate_v3.py` + post.py flow; superseded for generation by narrate_house.py on 2026-11-20; the measurements and rules below still apply):**
 - **Voice everywhere: ElevenLabs premade "Adam - Dominant, Firm"** `pNInz6obpgDQGcFmaJgB` **+ the "D" alien FX**
   (`asetrate=44100*1.1892,aresample=44100,atempo=0.8409,vibrato=f=5.5:d=0.08`; owner: "D is perfect, use it everywhere").
   (2026-11-20: Blox City storylines use Alex with narration v4.)

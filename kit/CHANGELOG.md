@@ -1,6 +1,10 @@
 # Changelog
 
-## 2026-11-20 v6.1 - narration v4 = the house narration (owner-approved by ear)
+## 2026-11-20 v6.1 - house narration "v3" (owner-approved by ear): tools/ep_audio/narrate_house.py
+- narrate_house.py = the exact method of the approved Yawn Curfew v3 takes (tags as written, no auto [speaking quickly],
+  FX on the whole take, ffmpeg silence trim, 4.75 w/s per sentence, 0.06 s joins, no beats); words.json from
+  faster-whisper on the final take. Rebuilding the approved take from cache reproduces it.
+- narrate_v4.py (below) is SUPERSEDED: it added [speaking quickly] to the yawn lines and the owner heard worse yawns.
 - NEW `tools/ep_audio/narrate_v4.py`: eleven_v3 per section (emotion tag + [speaking quickly]) + per-sentence delivery
   (silence cap 0.12 s, sentence pace 4.75 w/s, short = long lines, 0.06 s joins, <= 3 beats), Adam + D (In-this-town) or
   Alex (Blox City); writes voice.wav + words.json keyed to script.txt (digits <-> number words matched); cached per section.

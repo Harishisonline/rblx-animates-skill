@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Narration v4 = "delivery v4" (kit v6.1, owner 2026-11-20: "the hook v3 withbed is almost the exact output I am looking
+"""SUPERSEDED 2026-11-20 - use narrate_house.py (the owner-approved v3 method). Kept for history only.
+Narration v4 = "delivery v4" (kit v6.1, owner 2026-11-20: "the hook v3 withbed is almost the exact output I am looking
 for ... this is how all our future voice outputs will be"). THE default narration for every format:
   in_this_town / in_this_world -> Adam (premade pNInz6obpgDQGcFmaJgB) + the "D" alien FX
   blox_city (storylines)       -> Alex (yl2ZDV1MzN4HbQJbMihG), same delivery, no FX

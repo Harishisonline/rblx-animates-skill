@@ -1,5 +1,5 @@
 {
- "_doc": "ONE source of truth for per-format defaults (v3.7, 2026-11-14). Read by tools/format_preset.py, pacing.py, hype_lint.py, grade_check.py, qa_gate.py. Evidence tags: measured = numbers we measured on reference videos; inferred = our reading/convention; UNVERIFIED = not confirmed by a render or a listen. Sources: docs/research/{NARRATION_HYPE,MUSIC_RESEARCH,REF_IG_Dfe8B5Hs3G6,REF_IG_Dfs43n3oWqx,GEMINI_AUDIO_NOTES}.md. | v5.1 2026-11-18: in_this_world tiers/length/cta/tts/tempo updated from owner decisions (tiers corrected: short 80-120 s, long = ~20 min compilation). | v6.0 2026-11-19 (owner: 'implement everything the viral videos do'): tiers full 100-165 s / lite 60-78 s, script_v3, narration_v3 (Adam + D FX everywhere, flow edit, EARS targets), package_v6. Rules: docs/VIRAL_V6.md. The weekly self-learning run may re-measure these numbers (3+ new outliers) and logs every change in LESSONS + CHANGELOG. | v6.1 2026-11-20: narration_v4 (owner-approved house narration: eleven_v3 + per-sentence delivery) for every format; ears targets recalibrated to include the owner-approved reference.",
+ "_doc": "ONE source of truth for per-format defaults (v3.7, 2026-11-14). Read by tools/format_preset.py, pacing.py, hype_lint.py, grade_check.py, qa_gate.py. Evidence tags: measured = numbers we measured on reference videos; inferred = our reading/convention; UNVERIFIED = not confirmed by a render or a listen. Sources: docs/research/{NARRATION_HYPE,MUSIC_RESEARCH,REF_IG_Dfe8B5Hs3G6,REF_IG_Dfs43n3oWqx,GEMINI_AUDIO_NOTES}.md. | v5.1 2026-11-18: in_this_world tiers/length/cta/tts/tempo updated from owner decisions (tiers corrected: short 80-120 s, long = ~20 min compilation). | v6.0 2026-11-19 (owner: 'implement everything the viral videos do'): tiers full 100-165 s / lite 60-78 s, script_v3, narration_v3 (Adam + D FX everywhere, flow edit, EARS targets), package_v6. Rules: docs/VIRAL_V6.md. The weekly self-learning run may re-measure these numbers (3+ new outliers) and logs every change in LESSONS + CHANGELOG. | v6.1 2026-11-20: narration_house (the owner-approved 'v3' house narration, tools/ep_audio/narrate_house.py) for every format; ears targets recalibrated to include the owner-approved reference.",
  "default": "in_this_world",
  "aliases": {
   "in_this_town": "in_this_world",
@@ -298,9 +298,10 @@
     ],
     "posting": "one fixed daily slot; same file to YT Shorts + IG Reels"
    },
-   "narration_v4": {
-    "_src": "owner 2026-11-20: 'the hook v3 withbed is almost the exact output I am looking for ... all our future voice outputs'; reference ~/RobloxStories_tmp/yawn_curfew/voice_test/YawnCurfew_hook_v3_withbed.mp3",
-    "tool": "tools/ep_audio/narrate_v4.py",
+   "narration_house": {
+    "_src": "owner 2026-11-20: 'This is what I want ... this exact voice each and every time for all of my videos' - reference takes yawn_curfew/voice_test/YawnCurfew_hook_v3_withbed.mp3 + YawnCurfew_FULL_v3_withbed.mp3",
+    "name": "house narration 'v3'",
+    "tool": "tools/ep_audio/narrate_house.py",
     "model": "eleven_v3",
     "settings": {
      "stability": 0.0,
@@ -309,33 +310,31 @@
      "use_speaker_boost": true
     },
     "voices": {
-     "in_this_town": "adam_d: Adam pNInz6obpgDQGcFmaJgB + D alien FX",
-     "blox_city": "alex: yl2ZDV1MzN4HbQJbMihG, no FX"
+     "in_this_town": "Adam pNInz6obpgDQGcFmaJgB + D alien FX (FX on the whole take, after editing)",
+     "blox_city": "Alex yl2ZDV1MzN4HbQJbMihG, no FX"
     },
-    "per_sentence": {
+    "tts_script": "one paragraph = one request, performed as written: '[emotion] [speaking quickly] text'; sections with a written sound word / [yawns] / [laughs] / [whispers] get NO [speaking quickly]; energy tags rise from the trigger to the climax; CAPS payoff words; numbers as words",
+    "editing": {
+     "sentence_trim": "ffmpeg silenceremove -42 dB, inner silences capped 0.12 s",
      "speech_wps": 4.75,
-     "stretch_range": [
+     "stretch": [
       0.8,
       1.35
      ],
-     "inner_silence_cap_s": 0.12,
-     "sentence_gap_s": 0.06,
-     "short_lines": "same pace as long lines",
-     "sound_words": "natural length"
+     "sound_word_sentences": "natural length",
+     "join_gap_s": 0.06,
+     "beats": "none unless the owner asks (max 3)"
     },
-    "tags": "every section starts with its emotion tag + [speaking quickly]; energy rises from the trigger to the climax; CAPS payoff words; numbers as words",
-    "beats_max": 3,
     "reference_measured": {
-     "hook_wps": 4.2,
-     "pitch_range_st": 11.5,
-     "rising_ends": 0.12,
-     "full_take_yawn_curfew": {
+     "full_take": {
+      "dur_s": 109.0,
       "wps": 4.21,
-      "pitch_range_st": 11.3,
-      "gap_after_sentence": 0.22
+      "pitch_range_st": 12.7,
+      "gap_after_sentence": 0.18,
+      "pauses_0.3_0.6_per_min": 2.8
      }
     },
-    "voice_gate": "owner 2026-11-20: no more samples - the full take is generated directly; ears_check must pass; the owner hears it with the look-dev/final"
+    "voice_gate": "no samples (owner 2026-11-20); ears_check after the full take; the owner hears it with the look-dev/final"
    }
   },
   "horror": {

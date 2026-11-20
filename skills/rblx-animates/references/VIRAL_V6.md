@@ -79,17 +79,14 @@ Then the 20/25 VIRAL_PLAYBOOK score.
 
 ---
 
-## 2a. Narration v4 = the house narration (owner 2026-11-20, supersedes the generation part of section 2)
+## 2a. House narration "v3" (owner 2026-11-20, supersedes the generation part of section 2)
 
-`tools/ep_audio/narrate_v4.py`:
-- **Model:** eleven_v3 Creative, style 0.35; one request per section with its emotion tag + [speaking quickly].
-- **Per sentence:** silences capped at 0.12 s, every sentence at a 4.75 w/s speech pace (short lines = long lines),
-  0.06 s joins, at most 3 beats.
-- **Voices:** Adam + D for In-this-town; Alex for Blox City (no FX).
-- **Approved by ear:** "almost the exact output I am looking for". No more voice samples.
-- **Gate:** ears_check, with targets recalibrated in v6.1 so the approved reference passes.
-
-The measurements, targets and character-voice rules of section 2 still apply.
+`tools/ep_audio/narrate_house.py` (see VOICE_SPEC v6.1) is the only way voices are made.
+- **Model:** eleven_v3 Creative, one request per paragraph, tags as written.
+- **Editing per sentence:** silences capped at 0.12 s, a 4.75 w/s speech pace, 0.06 s joins.
+- **FX:** applied last (Adam + D for In-this-town; Alex for Blox City).
+- **Approved by ear on the full Yawn Curfew take:** "This is what I want".
+- **Measured:** 4.21 w/s, pitch range 12.7 st, 0.18 s after a full stop, 2.8 pauses of 0.3-0.6 s per minute.
 
 ## 2. Narration v3 (gate: `tools/ears_check.py audio/voice.wav --script script.txt` = 0 FAIL, then the owner's ear)
 

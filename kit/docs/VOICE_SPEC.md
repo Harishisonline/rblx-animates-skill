@@ -1,12 +1,16 @@
 # VOICE SPEC
 
-> **v6.1 (owner 2026-11-20) - THE house narration for every format, no more samples:** `tools/ep_audio/narrate_v4.py`
-> (eleven_v3 Creative, style 0.35, one request per section with its emotion tag + [speaking quickly], then per-sentence
-> delivery: silences inside a sentence capped at 0.12 s, every sentence stretched to a 4.75 w/s speech pace (short lines
-> = long lines), 0.06 s joins, at most 3 planned beats). In-this-town: Adam + D alien FX. Blox City storylines: Alex
-> (yl2ZDV1MzN4HbQJbMihG), same delivery, no FX. Reference: yawn_curfew/voice_test/YawnCurfew_hook_v3_withbed.mp3
-> ("almost the exact output I am looking for"). Gate: tools/ears_check.py 0 FAIL; the owner hears the full take with the
-> look-dev or the final (voice samples waived 2026-11-20).
+> **v6.1 (owner 2026-11-20) - THE house narration "v3" for every video, no more samples:**
+> `tools/ep_audio/narrate_house.py` reproduces the two takes the owner approved by ear
+> (yawn_curfew/voice_test/YawnCurfew_hook_v3_withbed.mp3 and YawnCurfew_FULL_v3_withbed.mp3).
+> - **Model:** eleven_v3 Creative (stability 0.0), style 0.35, one request per tts_script paragraph, performed as written:
+>   "[emotion] [speaking quickly] text". Paragraphs with sound words, [yawns], [laughs] or [whispers] get no
+>   [speaking quickly].
+> - **Editing, per sentence:** trim; cap inner silences at 0.12 s; stretch to a 4.75 w/s speech pace (short lines =
+>   long lines; sound-word sentences keep their length); 0.06 s joins; no extra beats.
+> - **Voices:** In-this-town = Adam with the D alien FX on the whole take. Blox City = Alex, same method, no FX.
+> - **Gate:** tools/ears_check.py.
+> - **Do not use** narrate_v4.py: it auto-added [speaking quickly] to the yawn lines, and the owner heard the difference.
 
 > **v6.0 (owner 2026-11-19) - current for every format:** narrator = ElevenLabs premade "Adam - Dominant, Firm"
 > `pNInz6obpgDQGcFmaJgB` + the "D" alien FX (`asetrate=44100*1.1892,aresample=44100,atempo=0.8409,vibrato=f=5.5:d=0.08`),
