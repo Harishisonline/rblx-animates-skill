@@ -1,5 +1,34 @@
 # Changelog
 
+## 2026-11-20 v6.1 - house narration "v3" (owner-approved by ear): tools/ep_audio/narrate_house.py
+- narrate_house.py = the exact method of the approved Yawn Curfew v3 takes (tags as written, no auto [speaking quickly],
+  FX on the whole take, ffmpeg silence trim, 4.75 w/s per sentence, 0.06 s joins, no beats); words.json from
+  faster-whisper on the final take. Rebuilding the approved take from cache reproduces it.
+- narrate_v4.py (below) is SUPERSEDED: it added [speaking quickly] to the yawn lines and the owner heard worse yawns.
+- NEW `tools/ep_audio/narrate_v4.py`: eleven_v3 per section (emotion tag + [speaking quickly]) + per-sentence delivery
+  (silence cap 0.12 s, sentence pace 4.75 w/s, short = long lines, 0.06 s joins, <= 3 beats), Adam + D (In-this-town) or
+  Alex (Blox City); writes voice.wav + words.json keyed to script.txt (digits <-> number words matched); cached per section.
+- Voice samples waived (owner 2026-11-20); ears_check targets recalibrated (f0 >= 11 st, 0.3-0.6 s pauses <= 5.5/min,
+  sentence-end pauses <= 16 %) so the owner-approved reference passes; viral references still pass.
+- First full take: Yawn Curfew, 109.2 s, 4.21 w/s, 2,882 characters.
+
+## 2026-11-19 v6.0 - viral v6: script v3, narration v3, packaging gate, weekly self-learning loop (owner-approved)
+- NEW `docs/VIRAL_V6.md`: the single source for script, narration, packaging/SEO, funnel targets, experiments, honest
+  monetization pace and the self-learning loop. Evidence: research/SKILL_ENHANCEMENT_PLAN_2026-11-19.md.
+- NEW `tools/script_lint_v3.py` (thresholds measured on 6 viral transcripts; viral 0 FAIL, our EP3/EP4/LCY 3-5 FAIL).
+- NEW `tools/ears.py` + `tools/ears_check.py` (narration QA gate; 4 viral 0 FAIL; EP4 4 FAIL, sample D 1 FAIL = melody).
+- NEW `tools/ep_audio/narrate_v3.py`: Adam + D alien FX, per-section generation, routes v2 / v3 / sts (owner read ->
+  Speech-to-Speech), character voices `{name}` via audio/voices.json, writes post_cfg {"mode": "flow", tempo <= 1.35}.
+- `tools/ep_audio/post.py`: mode "flow" (silences > 0.20 s -> 0.18 s, no meme pauses, <= 3 beats, tempo > 1.35 warns).
+- NEW `tools/package_check.py` (title 2-5 words <= 32 chars, 1 emoji, no hashtags/'In this town', spelling; 3-5
+  description hashtags; pinned question; made-for-kids answered).
+- NEW `tools/growth_scan.py` (weekly yt-dlp scan: roster + ours, outliers, title stats, viral script profiles, optional
+  EARS, discovery of new channels, GAPS.md, CHANNEL_LOG rows). `research/growth/roster.json`.
+- `docs/FORMATS.json`: in_this_world tiers full 100-165 s / lite 60-78 s, script_v3, narration_v3, package_v6.
+- NEW `docs/GROWTH_LOOP.md` section 9, `docs/EXPERIMENTS.md` (E1-E4), `docs/CHANNEL_LOG.md`.
+- Superseded: Alex narrator for new episodes, the 80-120 s length, the pause map (NARRATION_DELIVERY_2026-11-19), tts.py
+  for In-this-town, "no character voices".
+
 ## 2026-11-18 v5.1 - owner decisions: no CTA in In-this-town, faster takes, long/short tiers
 - `tools/ep_endcard.ending()` returns None when the script has no "like ... follow" line -> no end card;
   `ep_captions.py` handles it (captions stay at y 0.65). Blox City scripts keep the end card (ENDING_RULE.md v2).

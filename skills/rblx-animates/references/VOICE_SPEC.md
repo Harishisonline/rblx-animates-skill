@@ -1,3 +1,26 @@
+# VOICE SPEC
+
+> **v6.1 (owner 2026-11-20) - THE house narration "v3" for every video, no more samples:**
+> `tools/ep_audio/narrate_house.py` reproduces the two takes the owner approved by ear
+> (yawn_curfew/voice_test/YawnCurfew_hook_v3_withbed.mp3 and YawnCurfew_FULL_v3_withbed.mp3).
+> - **Model:** eleven_v3 Creative (stability 0.0), style 0.35, one request per tts_script paragraph, performed as written:
+>   "[emotion] [speaking quickly] text". Paragraphs with sound words, [yawns], [laughs] or [whispers] get no
+>   [speaking quickly].
+> - **Editing, per sentence:** trim; cap inner silences at 0.12 s; stretch to a 4.75 w/s speech pace (short lines =
+>   long lines; sound-word sentences keep their length); 0.06 s joins; no extra beats.
+> - **Voices:** In-this-town = Adam with the D alien FX on the whole take. Blox City = Alex, same method, no FX.
+> - **Gate:** tools/ears_check.py.
+> - **Do not use** narrate_v4.py: it auto-added [speaking quickly] to the yawn lines, and the owner heard the difference.
+
+> **v6.0 (owner 2026-11-19) - current for every format:** narrator = ElevenLabs premade "Adam - Dominant, Firm"
+> `pNInz6obpgDQGcFmaJgB` + the "D" alien FX (`asetrate=44100*1.1892,aresample=44100,atempo=0.8409,vibrato=f=5.5:d=0.08`),
+> generated per story section by `tools/ep_audio/narrate_v3.py` (route v2 / v3 / sts, the owner picks by ear), edited by
+> `post.py` mode "flow", and gated by `tools/ears_check.py` (viral numbers: 4.05-4.65 w/s, ~0.18 s after a full stop,
+> <= 3.5 pauses of 0.3-0.6 s a minute, pitch range >= 12 st). Character voices speak quoted lines (`{name}` lines, ids
+> from the ElevenLabs list with the owner's OK). Rules and evidence: `docs/VIRAL_V6.md` section 2. Everything below is
+> the history (Alex, eleven_v3) and stays valid only for re-renders of old episodes. Never change the narrator without
+> playing a clip and getting a yes.
+
 # Narration voice spec (user-supplied 2026-11-14)
 
 > **CURRENT for In this town / In this world (user decision 2026-11-14): calm deadpan first-person AI storyteller, NO hype.**
