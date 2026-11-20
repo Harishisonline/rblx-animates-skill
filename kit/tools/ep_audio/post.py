@@ -16,6 +16,25 @@ _FMT=str(_ST.get('format','')).lower()
 # v5.1 (owner 2026-11-18): faster takes for In-this-town like the viral channels (1.12); Blox City keeps 1.08.
 TEMPO=opt('tempo','RBX_TEMPO',1.12 if ('town' in _FMT or 'world' in _FMT) else 1.08)
 MAXP=int(opt('max_pauses','RBX_MAXP',8))
+# v5.2 (2026-11-18, owner: "no emotion, no better pause"; ref BvvcR_LJRuQ measured ~0.5 s after sentences, 0.64-0.8 s
+# before/after payoffs, ~4.2 words/s inside phrases). mode "beats": keep breathing room instead of crushing every gap.
+MODE=str(CFG.get('mode', os.environ.get('RBX_POST_MODE','tight')))
+SENT=opt('sentence_beat','RBX_SENT',0.40)    # total silence after . ? !
+COMMA=opt('comma_beat','RBX_COMMA',0.16)     # total silence after , : ;
+BSUB=opt('beat_sub','RBX_BSUB',-1)          # beats.json sec minus this = added silence (default GAP); v3 takes already pause ~0.3-0.4 s
+if MODE=='beats' and 'gap' not in CFG: GAP=0.12
+if MODE=='beats' and 'tempo' not in CFG and 'RBX_TEMPO' not in os.environ: TEMPO=1.04
+# v6.0 (2026-11-19, EARS on 4 viral In-this-world Shorts 16-34M views): mode "flow" = near-continuous speech like the
+# viral narrators: every silence > 0.20 s becomes 0.18 s (their gap after a full stop), meme cues play UNDER the voice
+# (no inserted pause), at most 3 deliberate beats from beats.json (the trigger, the clock, the twist; 0.3-0.5 s).
+# Tempo above 1.35 flattens the melody (F1/F2 at 1.6-1.9x measured 9.3 st, owner: "robotic"): regenerate faster instead.
+if MODE=='flow':
+    if 'gap' not in CFG and 'RBX_GAP' not in os.environ: GAP=0.18
+    if 'detect' not in CFG and 'RBX_DET' not in os.environ: DET=0.20
+    if 'pause' not in CFG and 'RBX_PAUSE' not in os.environ: PAUSE=0.0
+    if 'tempo' not in CFG and 'RBX_TEMPO' not in os.environ: TEMPO=1.0
+MAXB=int(opt('max_beats','RBX_MAXB',3))
+if TEMPO>1.35: print(f'WARN tempo {TEMPO} > 1.35 flattens the voice (EARS 2026-11-19): regenerate the take faster instead')
 src=A+'raw.wav' if os.path.exists(A+'raw.wav') else A+'raw.mp3'   # v5: tts.py chunk mode writes raw.wav (no mp3 delay)
 subprocess.run(['ffmpeg','-v','error','-y','-i',src,'-ac','1','-ar',str(SR),'-f','f32le',A+'raw.f32'],check=True)
 x=np.fromfile(A+'raw.f32',dtype=np.float32)
@@ -39,7 +58,7 @@ for c in cues:
     pause_after.setdefault(('line',li),[]).append(j)
     pause_after[int(starts[li]+j)]=c['sfx']
 pauses={k:v for k,v in pause_after.items() if isinstance(k,int)}
-if len(pauses)>MAXP:
+if len(pauses)>MAXP and MODE!='flow':
     print(f'WARN {len(pauses)} meme pauses > {MAXP} (DRIPDYL guide): mark the rest "no_pause": true in meme_cues.json')
 # shrink every silence longer than DET to GAP (centred)
 h=GAP/2; keep=[];t=0.0
@@ -59,14 +78,29 @@ y=np.concatenate(segs)
 # v5: drop leading silence before the first word, keep LEAD
 w0=mapt(words[0]['start']); cut=max(0.0,w0-0.02)
 y=y[int(cut*SR):]
-ins=sorted((mapt(words[i]['end'])-cut,i) for i in pauses)
+extra={i:PAUSE for i in pauses}
+if MODE=='beats':
+    for i,w in enumerate(words[:-1]):
+        tw=w['word'].rstrip('"\')')
+        if tw[-1:] in '.?!': extra[i]=max(extra.get(i,0),SENT-GAP)
+        elif tw[-1:] in ',:;': extra[i]=max(extra.get(i,0),COMMA-GAP)
+if MODE in ('beats','flow'):
+    bj=A+'beats.json'; _B=json.load(open(bj)) if os.path.exists(bj) else []
+    if MODE=='flow' and len(_B)>MAXB: print(f'WARN {len(_B)} beats > {MAXB}: viral narration pauses 0.3-0.6 s only 2-3 times a minute')
+    for c in _B:
+        li=c['line']-1; idxs=[j for j,t in enumerate(lines[li]) if t==c['after_word']]
+        i=int(starts[li]+idxs[c.get('nth',1)-1]); extra[i]=max(extra.get(i,0),float(c['sec'])-(GAP if BSUB<0 else BSUB))
+def _at(i):   # insert in the middle of the gap after word i (v3 word ends come early: never cut a tail)
+    a=mapt(words[i]['end']); b=mapt(words[i+1]['start']) if i+1<len(words) else a
+    return (a+max(a,b))/2-cut
+ins=sorted((_at(i),i,L) for i,L in extra.items() if L>0)
 parts=[];prev=0
-for te,i in ins:
-    k=int(te*SR); parts.append(y[prev:k]); parts.append(np.zeros(int(PAUSE*SR),np.float32)); prev=k
+for te,i,L in ins:
+    k=int(te*SR); parts.append(y[prev:k]); parts.append(np.zeros(int(L*SR),np.float32)); prev=k
 parts.append(y[prev:]); z=np.concatenate(parts)
 def final_t(tt):
-    m=mapt(tt)-cut; n=sum(1 for te,_ in ins if te<m-1e-6)
-    return (m+n*PAUSE)
+    m=mapt(tt)-cut
+    return m+sum(L for te,_,L in ins if te<m-1e-6)
 nw=[{'word':w['word'],'start':round(final_t(w['start'])/TEMPO+LEAD,3),'end':round(final_t(w['end'])/TEMPO+LEAD,3)} for w in words]
 z.astype(np.float32).tofile(A+'edit.f32')
 dl=f"adelay={int(LEAD*1000)}|{int(LEAD*1000)}," if LEAD>0 else ""
@@ -76,5 +110,5 @@ json.dump(nw,open(A+'words.json','w'),indent=0)
 json.dump({str(k):v for k,v in pauses.items()},open(A+'pauses.json','w'),indent=1)
 dur=float(subprocess.run(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',A+'voice.wav'],capture_output=True,text=True).stdout)
 sp=nw[-1]['end']-nw[0]['start']
-print('cfg pause',PAUSE,'gap',GAP,'lead',LEAD,'tempo',TEMPO,'| silences cut',sum(1 for a,b in sil if b-a>DET),'pauses',len(pauses),
+print('mode',MODE,'cfg pause',PAUSE,'gap',GAP,'lead',LEAD,'tempo',TEMPO,'| silences cut',sum(1 for a,b in sil if b-a>DET),'pauses',len(pauses),
       'dur',round(dur,2),'first word',nw[0]['start'],'last word end',nw[-1]['end'],'wps',round(len(nw)/sp,2),'wpm',round(len(nw)/sp*60,1))

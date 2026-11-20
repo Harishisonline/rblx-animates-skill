@@ -1,13 +1,12 @@
 ---
 name: "rblx-animates"
-description: "Make original Roblox-style 3D story reels the RBLX ANIMATES way (In this town/world first, Blox City, dripdyl-style Big Game) and run the growth loop: check reach and stayed-to-watch, compare with dripdyl, fix gaps, update the skill."
+description: "Make RBLX ANIMATES Roblox-style story Shorts end to end: research, script, voice, Blender animation, mix, finish, packaging and the growth loop."
 ---
 
 # RBLX ANIMATES: Roblox story video studio
 
 This skill reproduces the production line behind the Instagram channel @rblxanimates: original, blocky Roblox-style 3D story
-reels, 9:16 (In-this-town Shorts 80-120 s; Blox City storylines 90-120 s; plus ~20-minute compilations of uploaded videos),
-narrated by one fast, upbeat voice, with meme sound effects, burned-in captions, a like/share/follow end card on Blox City episodes only, and a growth loop that measures the channel, compares it side by side
+reels, 9:16 (In-this-town Shorts: full tier 100-165 s, lite tier 60-78 s; Blox City storylines 90-120 s; plus ~20-minute compilations of uploaded videos), narrated by one voice (Adam + the "D" alien FX, kit v6.0), with meme sound effects, burned-in captions, a like/share/follow end card on Blox City episodes only, and a growth loop that measures the channel, compares it side by side
 with Shorts that are winning right now (benchmark: @DripDyl) and updates this skill from what works. The quality bar is the two finished episodes in `examples/`:
 EP2 "The Poor Boy Who Bought the School" and EP3 "I Told ONE Secret. By Lunch, Everyone Knew."
 
@@ -20,7 +19,7 @@ The work is long (about 5 hours, 2.5 of them unattended rendering) and the perso
 | 1 | Viral research (when asked, when topics run dry, or when the growth loop finds a weak stage) | - |
 | 2 | Topic + script | **Script + title approved** (white card) |
 | 3 | Music question | **Music answer** (their track or the default) |
-| 4 | Voice take | **Voice OK** (they listen) |
+| 4 | Voice take | - (owner 2026-11-20: narration v4 is the approved house sound, no more samples; the full take is made directly, must pass ears_check, and the owner hears it with the look-dev/final) |
 | 5 | Meme SFX + mix | - (they hear it with the voice gate or the final) |
 | 6 | Shots + low-res QA | - |
 | 7 | Look-dev stills | **Look OK** |
@@ -66,12 +65,18 @@ rules. Never put Blox City names or branding into it.
 **Current priority (owner, 2026-11-17): new viral "In this town / In this world" videos built to the section 2 and
 section 3 rules. Do not remake or re-render old episodes.**
 
+**Kit v6.0 (owner 2026-11-19: "implement everything the viral videos do"): `~/RobloxStories/docs/VIRAL_V6.md` is the
+single source for script v3, narration v3, packaging/SEO, funnel targets and the self-learning loop. Where an older rule
+in this skill disagrees with VIRAL_V6, VIRAL_V6 wins.** Three new gates must be 0 FAIL before the owner sees each
+stage: `tools/script_lint_v3.py` (script), `tools/ears_check.py` (voice), `tools/package_check.py` (title/description).
+Each gate passes the viral references and fails our old episodes (`tools/v6_selftest.sh` proves it weekly).
+
 **Big Game (dripdyl style)** (section 2 rules, `RESEARCH_2026-11-17_dripdyl_gemini.md`): the owner's benchmark format. Cold open "I [tiny action] and [huge
 overreaction]" ("I stepped off a couch and 50 firefighters blasted me with fire hoses."), then "Welcome to the world's
 biggest game of [playground game]", "The rules were simple." (3 strikes, last one standing wins $1,000,000), a roster of
 absurd rivals (one hasn't moved since 2019, a grandma, a 5x champion), traps and eliminations each with a deadpan tag
 ("He went down." / "Worth it."), the narrator wins by **noticing a small detail**, a host fake-out, and a 3-8-word home
-callback gag ("I've been up here for 3 days."). dripdyl runs 130-165 s at 3.7-4.2 words/s; our Shorts are 80-120 s. Original games and gags only.
+callback gag ("I've been up here for 3 days."). dripdyl runs 130-165 s at 3.7-4.2 words/s; ours are 80-120 s Shorts. Original games and gags only.
 
 All formats share the narrator, the ending rule (`references/ENDING_RULE.md`), the look and the kit.
 
@@ -89,6 +94,9 @@ script, title or characters. The proven method (2026-11-17, 16 videos, `RESEARCH
    Ask Gemini (same task chat, step 3) for 10 more from the last 30 days with exact `/watch?v=` links; it finds them, you
    measure them. On 2026-11-17 all 10 of its links were real but only 1 was a winner (8.5M); the rest had 6k-370k views,
    so filter by measured views and outlier score before learning from anything.
+   **Benchmark rule (owner 2026-11-19):** rules and numbers come ONLY from outliers (views >= 10x subscribers or >= 5x the
+   channel median). A single video from a small channel (BvvcR_LJRuQ, 85 subs) once pulled our pace the wrong way. Tutorial,
+   course and vendor videos (miro, Crealix, nicheless) are **claims**: record them, test them, never make them rules alone.
 2. **Measure with yt-dlp (numbers only come from here):** `yt-dlp --skip-download -J https://www.youtube.com/watch?v=ID`
    for views, likes, comments, duration, upload date, channel subscribers; `--write-auto-subs --sub-langs "en.*" --sub-format
    json3` for the words. From the captions compute words per second, the first sentence, when the crisis starts, the ending
@@ -140,17 +148,29 @@ If the person did not name a topic, propose 3 one-line premises tied to the rese
 Then write the script. The model for structure and density is `examples/EP3_friend_secret/SCRIPT_AND_PLAN.md`
 (and EP2's). What makes these work:
 
-- **Length by format and tier (owner 2026-11-18; numbers in `FORMATS.json`):** every In-this-town video is a **Short**
-  of 80-120 s (310-450 words, as many a week as possible); Blox City 90-120 s (300-370 words). **Long videos** are ~20-minute
-  compilations of videos already on the channel (2 a week, no new animation; YouTube long-form, whose watch hours count
-  toward YPP separately from Shorts views). Kit v5.1 delivers ~3.8-4.2 words/s for In-this-town (TEMPO 1.12, 0.24 s meme pauses). Write `story.json` with
+- **Script v3 (kit v6.0, VIRAL_V6 section 1; gate `python3 tools/script_lint_v3.py <ep>/script.txt [--tier lite]` = 0
+  FAIL):** measured on 6 viral transcripts (16-34M views) vs ours. The real gaps are length (viral 549-708 words, ours
+  ~330), a "Then one night / Last Friday at sunset" trigger (6/6 viral, 0/3 ours), "You see," / "The rule is simple."
+  mechanics (5/6), "Me? I'm 12, and ..." / "My name is X, and ..." (4/6), a clock (6/6), flowing told-to-a-friend
+  sentences joined with and/so/but (3.9-6.7 per 100 words) and fewer 1-3-word fragments (dripdyl 9-11 %, ours 30-49 %).
+  Order: rule -> "You see," mechanics + a sound word -> 4-6 named/numbered world examples as little chain reactions ->
+  "Me?" + proof -> my person with a planted detail -> trigger -> fast chain reaction + clock -> the narrator uses the
+  rule's loophole -> the planted detail pays off -> 3-12-word wry last line, hard cut.
+- **Length by format and tier (owner 2026-11-19, kit v6.0; numbers in `FORMATS.json` in_this_world.tiers):**
+  In-this-town **full** 100-165 s (450-720 words, like the giants) and **lite** 60-78 s (250-340 words, for volume and
+  experiment E2); Blox City 90-120 s (300-370 words). (Superseded: 80-120 s, 2026-11-18.) **Long videos**
+  are ~20-minute compilations of videos already on the channel (2 a week, no new animation, built from finished
+  `out/final.mp4` files; YouTube long-form watch hours count toward YPP separately from Shorts views). Kit v5.1 delivers
+  ~3.8-4.2 words/s for In-this-town (TEMPO 1.12, 0.24 s meme pauses). Write `story.json` with
   `"format"` (`in_this_town` / `blox_city`), `"tier"` (`short`; `long` = compilation) and `"hook_word"` (the twist word that must land
   by 2.5 s); the kit reads them. Count words with a script, don't guess; if over the tier, cut pauses first, then a line.
 - **Hook = the whole promise in one breath:** "I told my best friend one secret. By lunch, the whole school knew. And he
   got paid for it." The viewer decides in two seconds.
 - **One line = one beat**, each beat a picture the camera can show. Concrete, visual details (a duck night-light, a shoe
   with a hole a pencil fits through) carry the story and become the props and callbacks.
-- **The narrator reads everything**, quoted character lines included. No character voices (owner, re-confirmed 2026-11-18).
+- **Character voices on quoted lines (owner 2026-11-19, replaces "narrator reads everything"):** 1-6 short quoted
+  lines per Short, written `{grandma} "Nico, sweetie!"` in `tts_script.txt`, voices mapped in `audio/voices.json` (ids
+  only from the ElevenLabs voice list, shown to the owner).
 - **Meme SFX marks** `[RECORD SCRATCH]`, `[BRUH]`, `[FAHHH]`... sit after a full stop, in a word gap, never on a word.
   Plan 15-20 per episode, but at most 8 get a pause (0.24 s); the others play in word gaps with `"no_pause": true` in
   `meme_cues.json`. They are never spoken.
@@ -159,9 +179,22 @@ Then write the script. The model for structure and density is `examples/EP3_frie
 - **What to make: `references/VIRAL_PLAYBOOK.md`.** Premises from the 7 families scored 1-5 on mute test, 3x
   escalation, buildable with the kit, reverse-rule climax and shareability; propose only premises at >= 20/25 (show the
   score on the white card), with a personal stake + clock early and a visible counter when the rule has a number. Write
-  with its beat template (template B, 80-120 s - owner 2026-11-18; the 45-60 s template A and 35-45 s "lite" format are
-  not used for now), its first-sentence formulas and its ending formulas. Check COMPETITORS.md so a
+  with its beat template (template B stretched to 80-120 s; template A 45-60 s and the 35-45 s "lite" format are not
+  used for now - owner 2026-11-18), its first-sentence formulas and its ending formulas. Check COMPETITORS.md so a
   premise is not a recent hit (copy mechanisms, never premises, titles or characters).
+- **Hard idea criteria (owner 2026-11-19), all four or the premise is dropped:** the rule is about something everyone has
+  or does (your first word, your laugh, your last meal - never "I'm a sock"); a friend or family member is at stake; a
+  visible counter or clock; a twist that pays off the rule. Then the 20/25 score.
+- **In-this-town = the 12 beats (owner 2026-11-19, Crealix formula, matches our template):** 1 the rule in one line ->
+  2 how it works, with visible details -> 3 a small case and a huge one -> 4 the legend (one crazy thing that once
+  happened) -> 5 how the whole town lives with it -> 6 "And me?" (the narrator's flaw or role) -> 7 my person (friend or
+  sibling, a detail that comes back) -> 8 the problem with real stakes -> 9 three tries that fail, each bigger -> 10 the
+  last card (what the hero never wanted to do) -> 11 the big moment -> 12 the twist / a question to the viewer. One beat
+  per line, every line a new picture, the rule always pays off. At 4.3-4.6 words/s: ~260-275 words per 60 s.
+- **Style lock (owner 2026-11-19):** `references/STYLE_EXAMPLES.md` holds 3-5 scripts the owner approved. Every new script
+  is written against them (rhythm, sentence length, jokes, endings), then checked for AI-slop phrases ("little did I
+  know", "in a world where", "everything changed", "it was then that", stacked adjectives, morals spelled out). A
+  generic AI script is never shown to the owner.
 - **First 3 seconds decide "stayed to watch" (check before approval, every format):** frame 0 is motion or the weirdest
   picture of the video (open on the climax image or the rule happening), never a static phone screen, a text wall or a
   character standing; sentence 1 is a world rule or an absurd consequence ("I did X and Y happened"), never backstory -
@@ -177,8 +210,10 @@ Then write the script. The model for structure and density is `examples/EP3_frie
   silence); dripdyl 3.7-4.2, In-this-world hits 4.1-4.9 with almost no dead air. Keep at most 6-8 meme pauses, cut every
   other silence over 0.15 s except a deliberate 0.25 s beat before a punchline. The owner wants faster takes like the
   viral channels (2026-11-18): kit v5.1 uses TEMPO 1.12 for In-this-town; still play the sample. Measure, never assume.
-- **Title (2026-11-17 gap):** 2-6 words, Title Case, at most 1 emoji, no "PART 2", no hashtags in the title (they go in
-  the description). Ours ran to 98 characters in caps and got cut off in the feed.
+- **Title (kit v6.0, gate `tools/package_check.py`):** 2-4 words + exactly 1 emoji naming the rule's object ("Laugh
+  Battery 🔋"), at most 32 characters, Title Case, spell-checked; never hashtags, "In this town", "PART 2" or "ROBLOX
+  STORY" in the title. Measured 2026-11-19: booming channels 13-18 characters, 98-100 % one emoji, 0 % hashtags; ours
+  94 characters, 86 % hashtags, one typo ("aughing").
 - **Ending depends on the format (owner 2026-11-18, `references/ENDING_RULE.md` v2):**
   - **In this town / In this world: no like/share/follow line and no "Comment X or Y".** End on the last story line - a
     3-8-word callback gag, a truth line, a rule-reversal twist or a cliffhanger (VIRAL_PLAYBOOK ending formulas) - and cut.
@@ -209,11 +244,57 @@ Kevin MacLeod tracks were rejected by the channel owner (not the sound viral cre
 
 ---
 
-## 5. Voice (gate: voice OK)
+## 5. Voice
 
-Narrator: ElevenLabs voice **Alex** `yl2ZDV1MzN4HbQJbMihG`, model `eleven_v3`, stability 0.0, similarity 0.75, style 0.25,
-speaker boost (kit preset `alex_ep1`, `references/VOICE_SPEC.md`). Never change the voice because of measurements; only after
-playing a clip to the person and getting a yes. Never clone a voice from someone else's video.
+**Narration v4 = THE house narration for every format (kit v6.1, owner 2026-11-20: "the hook v3 withbed is
+almost the exact output I am looking for ... this is how all our future voice outputs will be ... no need to make more
+samples"; reference `~/RobloxStories_tmp/yawn_curfew/voice_test/YawnCurfew_hook_v3_withbed.mp3`):**
+- **Who speaks:** In-this-town = Adam `pNInz6obpgDQGcFmaJgB` + the D alien FX; **Blox City storylines = Alex**
+  `yl2ZDV1MzN4HbQJbMihG` with the same delivery and no FX. Character voices for quoted lines as below.
+- **Generate:** `EP=<ep> python3 tools/ep_audio/narrate_v4.py [--voice adam_d|alex]` (the preset follows `story.json`
+  format). It sends one eleven_v3 request per story section (stability 0.0 Creative, similarity 0.75, style 0.35, speaker
+  boost), adds `[speaking quickly]` after each section's emotion tag, then works PER SENTENCE from the alignment: trims
+  the edges, caps every silence inside a sentence at 0.12 s, stretches each sentence to a 4.75 w/s speech pace (factor
+  0.80-1.35; short lines get the same pace as long ones; sound words like "Ahh-hh." "Thunk!" keep their length), joins
+  sentences with 0.06 s and inserts at most 3 planned beats (`audio/beats.json` [{"after": <script word index>, "sec":
+  0.4}]). It writes `audio/voice.wav`, `voice.mp3`, `words.json` keyed to `script.txt` tokens (digits in the captions match
+  number words in the TTS file) and `narrate_report.json`. Cached per section. Then `python3 tools/ears_check.py
+  audio/voice.wav --script script.txt` must pass (targets recalibrated in v6.1 so the approved reference passes).
+- **Write `tts_script.txt` for it** (the delivery comes from the text): blank-line sections of 1-3 sentences, each section
+  starting with its emotion tag in an energy arc that RISES from the trigger to the climax ([mischievously], [curious],
+  [playful], [matter-of-fact], [serious] for the setup; [ominous], [tense], [urgent], [whispers], [excited],
+  [determined] for the build and climax; [deadpan] / [proud] for the wry ending); CAPS on the payoff word of key lines;
+  numbers and times as words ("forty-six", "two a.m."); the same words as `script.txt` otherwise; `[yawns]`, `[laughs]`,
+  `[sighs]` before written sound words. Example: `~/RobloxStories_tmp/yawn_curfew/tts_script.txt` (first full take:
+  109 s, 4.21 w/s, about 2,900 characters).
+- Never change a voice because of measurements; the owner decides by ear. Never clone a voice from someone else's video.
+
+**Narration v3 (kit v6.0, superseded 2026-11-20 by v4 for generation; its measurements and rules still apply):**
+- **Voice everywhere: ElevenLabs premade "Adam - Dominant, Firm"** `pNInz6obpgDQGcFmaJgB` **+ the "D" alien FX**
+  (`asetrate=44100*1.1892,aresample=44100,atempo=0.8409,vibrato=f=5.5:d=0.08`; owner: "D is perfect, use it everywhere").
+  (2026-11-20: Blox City storylines use Alex with narration v4.)
+- **Generate:** `EP=<ep> python3 tools/ep_audio/narrate_v3.py --route v2|v3|sts` (replaces tts.py): one request per story
+  section (blank-line sections in `tts_script.txt`), speed from the model, narrator FX applied, `{name}` lines in character
+  voices; writes `audio/raw.wav`, `alignment*.json`, `narrate_report.json` and `post_cfg.json {"mode": "flow"}` with a
+  tempo capped at 1.35. Then `words.py` -> `post.py` -> **`python3 tools/ears_check.py audio/voice.wav --script
+  script.txt` = 0 FAIL** -> the owner's ear.
+- **Viral numbers the gate holds (EARS: demucs + faster-whisper + Praat on 4 Shorts of 16-34M views; all 4 pass):**
+  4.05-4.65 words/s; ~0.18 s after a full stop (0.13-0.24); at most 10 % of sentence ends pause over 0.3 s; at most 3.5
+  pauses of 0.3-0.6 s a minute and 0.6 over 0.6 s; pitch range at least 12 semitones (Adam alone 8-10 = the "robotic"
+  sound); first word at most 0.06 s. Our EP4 failed 4 checks, sample D only the melody one.
+- **Flow edit (`post.py` mode "flow"):** every silence over 0.20 s becomes 0.18 s, meme SFX play under the voice (no
+  inserted pauses), at most 3 deliberate beats in `beats.json` (trigger, clock, twist). Never speed a take past 1.35x
+  (F1/F2 at 1.6-1.9x measured 9.3 st and the owner heard "robotic"): regenerate faster instead. This supersedes the
+  2026-11-19 pause map and everything below about In-this-town pace.
+- **Melody routes (experiment E1, the owner picks by ear on one 20-s hook):** `v2` (multilingual_v2, stability 0.30,
+  style 0.45, speed 1.2, previous/next text), `v3` (eleven_v3 Creative + emotion tags per section), `sts` (the owner
+  reads the script energetically into a phone -> Speech-to-Speech into Adam keeps the owner's timing and melody; the
+  most original voice). Never a performance taken from another creator's video.
+
+*History (old episodes only):* In-this-town used Adam multilingual_v2 stability 0.45 / style 0.10 / speed 1.2 + atempo;
+Blox City used Alex `yl2ZDV1MzN4HbQJbMihG`, `eleven_v3`, stability 0.0, similarity 0.75, style 0.25 (kit preset `alex_ep1`).
+Never change a voice because of measurements; only after playing a clip to the person and getting a yes. Never clone a
+voice from someone else's video.
 
 **Delivery direction (dripdyl-style, from the Gemini study; tags for eleven_v3, test at the voice gate):** a sharp friend
 telling an unbelievable story - expressive in the setup, flat and matter-of-fact on absurd lines. Lift key nouns and numbers
@@ -224,6 +305,21 @@ Gemini's verdict on our EP3/EP4 (2026-11-17): Alex reads dramatic and calm lines
 lines sound like the narrator. So tag every line with its emotion in `tts_script.txt` (`[excited]`, `[deadpan]`,
 `[whispers]`, `[shouting]`, `[sad]`) and make the first line the most energetic of the video. Do not change the voice or
 its settings for this; no side-character voices (owner 2026-11-18).
+**In-this-town narration v2 (owner 2026-11-19, replaces the EP4 recipe below for this format):** the owner called every
+3.2-3.4 words/s take "slow, an old man narrating" / "AI slop". Winners measure 4.1-4.9 words/s (miro's 58-Short study ~260
+wpm; Volze 4.6; Crealix's own Adam stories 2.9-3.2 = the slow sound). Rules: **pace 4.3-4.6 words/s overall** (the exact
+value = the owner's pick from the 2026-11-19 samples in `~/RobloxStories_tmp/voice_adam/`: B 4.3, C 4.6, D 4.6 + "alien"
+FX); every pause over 0.12 s cut to 0.12 s; at most 4 meme pauses of at most 0.25 s; under 2 s of silence in the whole
+Short; first word <= 0.05 s. Optional "alien" FX (Crealix claim, test): +3 semitones with tempo kept + `vibrato=f=5.5:d=0.08`.
+Check every take by transcription (faster-whisper: every script word spoken, nothing added) and play it to the owner.
+Generator: `~/RobloxStories_tmp/voice_adam/make_samples.py` (one request, variants made in post, no extra credits).
+**Blox City narration = the EP4 recipe (owner 2026-11-18, after rejecting the per-line v5 takes as "slow-paced AI slop"
+ and approving the "Laughs Charge You" video made with it):** ONE eleven_v3 request for the whole script, prefixed
+`[fast, urgent, breathless]`, plain `tts_script.txt` lines (no per-line tags), Alex at stability 0.0 / similarity 0.75 /
+style 0.25; post = silences over 0.22 s cut to 0.14 s, 0.45 s meme pauses, 0.10 s lead-in, tempo 1.08
+(`audio/post_cfg.json` {"pause": 0.45, "gap": 0.14, "detect": 0.22, "lead": 0.10, "tempo": 1.08, "mode": "tight"};
+`RBX_TTS_MODE=single RBX_TTS_DEFAULT_TAG="[fast, urgent, breathless]" python3 tts.py`). ~3.3-3.5 words/s, ~1,900 credits per
+100 s. Worked example: `~/RobloxStories_tmp/laugh_battery_ep4voice`. The per-line method below stays available for tests only.
 Narration (kit v5, `references/DRIPDYL_STYLE_GUIDE.md` section 8): `tts.py` now sends **one request per line** of
 `tts_script.txt` with that line's tags (cached, so re-running only pays for changed lines; `RBX_TTS_MODE=single` = old
 way); `post.py` starts the voice on frame 0, shrinks gaps to 0.08 s and makes meme pauses 0.24 s (warns above 8; mark
@@ -319,6 +415,38 @@ The grammar that makes it look clean (each rule fixed a mistake the channel owne
 `kit/assets/faces` (Harry, Tyler, Luna, mom, dad, grandma, grandpa, mayor, kids...). Recolor and restyle per episode (see
 `leo()`, `maxx()`, `chase()` in the EP3 shots). `kit/docs/CAST.md` lists them.
 
+**Learned from the blocky-shorts build (2026-11-18; the owner rated its output good; our Blender animation stays):**
+the same story was made with the Remotion blocky-shorts skill (`~/RobloxStories_tmp/blocky_laugh`, notes in
+`BLOCKY_SHORTS_PIPELINE.md`). What made it work, applied to every Blender episode:
+- **A shot table before any code:** one row per shot (id, anchor word, set, beat, lens), every shot 0.75-2.2 s, mean
+  ~1.35 s (74 shots in 100 s); a cut on the word that changes the picture. Write it as a planner file that prints
+  warnings and a SHOTS.md, then keep `shots.py` keyed to the same words.
+- **The rule on screen in every frame:** a prop over every head that shows the rule (battery: `rbx/battery.py`
+  `battery_hud`; counters, timers) plus a straight insert of it at EVERY number change, with a ding/charge or
+  power-down sound on it.
+- **A per-character timeline as data:** for each character, segments of (start word, end word, set, place, action,
+  emotion, held prop); a shot only picks the set and the lens. At a cut, look the actor up in the shot's own set
+  (3-frame tolerance), so nobody pops for a frame.
+- **Lens numbers before any render:** LENS_IN (lens inside a body), BLOCKED (a body between lens and face), FACING (the
+  face turned to the lens, dot > 0.3), FRAME (face inside a 6 % margin), NEAR (a body within 0.75 m of a fixed lens unless
+  it is a planned over-the-shoulder). All clean, then render.
+- **Critic the whole film, shot by shot, at least 3 rounds:** a labelled sheet of the middle frame of every shot (the
+  low-res pass below gives it), fix, repeat, before look-dev and the final.
+- **Vertical framing:** the 9:16 frame is ~30 deg wide: two people 2.3 m apart need the lens ~4 m back; seat a pair
+  <= 1.9 m apart and cheat both faces toward the lens; head-down (powered-off, sad) poses get a low lens; in face
+  close-ups the head prop sits lower and smaller so it is not cut at the top.
+- **Sets:** every interior has four walls (any lens may turn around); doors open away from the lens; no translucent
+  light cones in front of faces (a small warm point light under a face instead).
+- **Captions: our own signature (owner 2026-11-19).** The white Poppins pop is miro's signature, so it is not ours any
+  more. The channel's caption style (colour, font, animation) is the owner's pick from 3 options and is written to
+  `references/LOOK.md`; keep 1-2 words, inside the safe zone (centre ~65-68 % height, 12 % side margins), at most 2
+  lines, synced to the voice. Mute test: muted and with the name hidden, would someone still know it's ours?
+- **Sound (owner 2026-11-19):** the music bed must be clearly audible: ~7 dB under the voice in speech (kit `qa_audio.py`
+  "bed in preview" 6-8 dB; the blocky mix's 15+ dB was inaudible and the owner noticed), plus a pop, swoosh or boom on
+  every payoff. Previously: the In-this-town bed side-chain ducked under the voice and dropped out for the one awkward-silence beat;
+  ~30 kit SFX on story beats (ding on every charge, power-down on every switch-off, thunder on lightning, a rimshot on
+  the last gag); -14 LUFS, true peak -1.5 dB.
+
 **Low-res pass + QA:** `Blender -b --factory-startup -P ~/RobloxStories/tools/ep_lo.py -- <slug> all` (detached), then read
 `render_lo.log`. Flags: FLOAT, CLIP, HALF, CUTOFF, TINY, NOTOUCH, PROPFLOAT, EYELINE, AWAY, BLOCKED. Fix every one or write
 down why it is acceptable (e.g. AWAY on a POV phone shot where the holder's head is hidden on purpose). Then make a 2 fps
@@ -326,6 +454,11 @@ contact sheet and **look at it** - flags cannot see "uncanny". EP3 went from 280
 Then run the viral gate: `python3 ~/RobloxStories/tools/ep_viral_check.py <ep>` (static, no render: idle-only shots,
 actions per second, recipe cameras, hook move, frame-0 blur, first word, words/s, silences, meme pauses, hook word time from
 `story.json` "hook_word", tagged TTS lines, outro). 0 FAIL before look-dev; EP4 fails 8 of its checks.
+**Motion density gate (owner 2026-11-19; miro: "the strongest signal" - in 9 of 10 channels the viral Shorts move more
+than the same creator's weak ones):** >= 1 keyed action (strike, gesture, turn, react) per 0.7 s, >= 35 % of shots on a
+recipe camera (crash_zoom, push_in, dutch, hero_low, dolly_zoom, run_follow, whip...), a push or move on EVERY shot, no
+shot static for more than 2 s, and night scenes keyed bright enough to read on a phone. These viral-check lines must PASS
+before look-dev (the voice lines follow section 5).
 
 **Going faster with a team (optional):** for 60+ shots, split the work: a Manager/QA agent owns `shots.py` (shared helpers)
 and the kit, Blender A owns `shots_a.py`, Blender B owns `shots_b.py` (`shots.py` execs both). They coordinate through an
@@ -361,9 +494,16 @@ while rendering (people ask "is it stuck?": answer with frame counts and the las
 
 ## 10. Delivery and wrap-up
 
-- Package it (`references/VIRAL_PLAYBOOK.md` section 5): YouTube title 2-6 words, Title Case, <= 1 emoji, no "PART 2",
-  no hashtags; description = one teaser line + #roblox #robloxstory #shorts; Instagram caption = a hook line + 4-5
-  hashtags; cover = the brightest frame with a clear face or giant prop; made-for-kids answered truthfully.
+- Package it (kit v6.0, VIRAL_V6 section 3): write `<ep>/package.json` {title, description, ig_caption,
+  pinned_comment, made_for_kids, first_frame, playlist} and run `python3 tools/package_check.py <ep>` = 0 FAIL. Title
+  2-4 words + 1 emoji (<= 32 characters, no hashtags / "In this town" / "PART"); description line 1 = the rule as a
+  question, then 3-5 hashtags (#roblox #robloxstory #robloxanimation #shorts + 1 topic); a pinned open question about the
+  loophole or twist, and replies to every comment in the first hour; Instagram caption = a hook line + 3-5 hashtags;
+  playlist "In This Town" or "Blox City"; one fixed daily posting slot; made-for-kids answered truthfully by the owner.
+  Channel identity (owner to do once): display name "RBLX ANIMATES" on YouTube (it still reads "Roblox animated"),
+  banner + description that say what the channel is, the best Short pinned.
+- After posting: ask for the YouTube Studio "Viewed vs swiped away" and retention screenshots at 48 h and 7 d (target
+  >= 70-75 % viewed, a claim from 2026 guides); log them in CHANNEL_LOG.md.
 - Deliver `out/final.mp4` (and the voice/mix files if asked). **Never post** to Instagram or YouTube without an explicit yes
   for that exact file. Record what was posted in `<ep>/POSTED.md` when they say they posted.
 - Cloud backup: before saying a file is in Google Drive, check the Drive app is running and the file is **in the cloud**
@@ -380,6 +520,18 @@ while rendering (people ask "is it stuck?": answer with frame counts and the las
 Run it when the person asks how the channel is doing, to check reach, what others do better, to grow or monetize, "run the
 growth loop", every Monday, and 48 h after each post. Full instructions: `references/GROWTH_LOOP.md` (Project instructions).
 The goal is a monetized channel, so every step ends in a decision that moves a monetization number.
+
+**Self-learning loop (kit v6.0, owner 2026-11-19; `~/RobloxStories/docs/GROWTH_LOOP.md` section 9):** a scheduled task
+"RBLX weekly self-learning loop" runs every Monday 10:17 IST on the Mac:
+- `tools/growth_scan.py --discover` writes the roster and our channel, this week's outliers, title and script profiles,
+  new candidate channels -> `~/RobloxStories_tmp/research/growth/<date>/GAPS.md` + `CHANNEL_LOG.md`.
+- `tools/v6_selftest.sh` = the test cases: every gate must still pass the viral references and judge our latest episode.
+- It self-updates measured thresholds, the roster, experiments and lessons, logging each in LESSONS + CHANGELOG with
+  evidence. It proposes (never applies) SKILL.md, narrator, music, runtime, ending and caption changes.
+- It writes the weekly white card to the Project as `knowledge/WEEKLY_<date>.md`.
+- Honest pace: YPP tier 1 needs 500 subs + 3M qualified Shorts views in 90 days. From 27 subs, 2 weeks would need
+  ~214k views a day, i.e. a breakout, so the loop maximises breakout chances (more gated uploads, the biggest gap
+  closed each week, 2 follow-ups within 48 h of any Short above 5x our median) and never promises a date.
 
 1. **Measure our reach (never invent a number).** Windsor.ai connector (`get_connectors` -> Instagram `17841479901972435`,
    YouTube `91882`; `get_fields` before `get_data`), YouTube Studio / Instagram Insights screenshots the person gives, and
@@ -405,9 +557,6 @@ The goal is a monetized channel, so every step ends in a decision that moves a m
    (`https://raw.githubusercontent.com/Harishisonline/rblx-animates-skill/main/...`). Its Connected Folders did not reach
    the web chat, github.com pages made it ask for a sign-in, and on a later turn raw URLs were blocked too: then paste the
    key code excerpts into the chat.
-   To let Gemini judge our production code, give it the public raw GitHub URLs of the repo files
-   (`https://raw.githubusercontent.com/Harishisonline/rblx-animates-skill/main/...`); its Connected Folders did not reach
-   the web chat, and github.com pages made it ask for a sign-in.
 4. **Find and learn from videos that already win it:** section 2 (outliers, yt-dlp numbers, Gemini Task chat). Write each
    finding as `rule | evidence (IDs + numbers) | level | test | decision rule`. Levels: proven (our own test won) > observed
    (3+ independent channels) > hypothesis. Only proven and observed rules become skill defaults; hypotheses become
@@ -448,5 +597,9 @@ own story, visual hook, sets and cast.
 | `RESEARCH_2026-11-17_dripdyl_gemini.md`, `RESEARCH_2026-11-17_gap_vs_dripdyl.md`, `RESEARCH_2026-11-17_viral_roblox_shorts.md` | viral research, gaps, Big Game format |
 | `references/VIRAL_PLAYBOOK.md` | premises, scoring, script templates, endings, packaging, posting plan |
 | `references/DRIPDYL_STYLE_GUIDE.md` | every shots.py, tts_script.txt and audio config (camera, motion, narration) |
+| `BLOCKY_SHORTS_PIPELINE.md`, `NARRATION_REF_BvvcR_LJRuQ.md`, `VOICE_FIX_2026-11-18.md` | the approved "Laughs Charge You" build, its voice and what was learned |
+| `RESEARCH_2026-11-19_miro_viral_roblox_shorts.md`, `RESEARCH_2026-11-19_voice_and_growth.md` | why our Shorts and narration underperform; the Adam voice, pace, 12 beats, originality, motion; the approved change list |
+| `STYLE_EXAMPLES.md` | before writing any script (the owner's approved scripts = the style lock) |
+| `~/RobloxStories/docs/VIRAL_V6.md`, `FORMATS.json` (in_this_world.script_v3 / narration_v3 / package_v6), `EXPERIMENTS.md`, `SKILL_ENHANCEMENT_PLAN_2026-11-19.md` | kit v6.0: every script, voice take, package and weekly loop; wins over older rules |
 | `examples/EP2_*`, `examples/EP3_*` | scripts, cue files, shots, QA report of finished episodes |
 | `kit/SKILL.md` (installed as `~/RobloxStories/SKILL.md`) | the kit's API in depth |
